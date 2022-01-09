@@ -10,7 +10,7 @@
 <configuration>
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>[%t] [%d] %5p [%C:%M] \(%F:%L\) - %m%n</pattern>
+            <pattern>[%t] [%d] [%C:%M] \(%F:%L\) - %m%n</pattern>
             <!--<pattern>%-4r [%t] [%d] %5p [%C:%M] \(%F:%L\) - %m%n</pattern>-->
             <!-- Pattern mitigating CRLF injection -->
             <!--          <pattern>%-4r [%t] [%d] %5p [%C:%M] \(%F:%L\) - %replace(%m){'\r?\n','<NEWLINE>'}%n</pattern> -->
@@ -26,7 +26,7 @@
        to JAX-RS server's in/outInterceptors. When running unit test with embedded
        Tomcat, the server's logback.xml overrides this, so you need to modify the
        server's logback.xml to get the proper CXF client logging. -->
-    <logger name="org.apache.cxf" additivity="false" level="ERROR"> <appender-ref
+    <logger name="org.apache.cxf" additivity="false" level="INFO"> <appender-ref
             ref="stdout" /> </logger>
     <!-- <logger name="org.apache.http" additivity="false" level="DEBUG"> <appender-ref
        ref="error" /> </logger> <logger name="org.apache.http.wire" level="ERROR">

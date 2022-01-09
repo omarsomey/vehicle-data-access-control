@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import tf.cyber.thesis.automotiveaccesscontrol.accesscontrol.XACMLInterceptor;
 
 @Configuration
 @EnableWebSecurity
@@ -16,7 +18,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("demo")
+                .withUser("simon")
                 .password(passwordEncoder().encode("demo")).roles("user");
     }
 
@@ -24,9 +26,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .httpBasic().and()
+                .addFilterAfter(new XACMLInterceptor(), BasicAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/vehicle/**").authenticated()
-                .anyRequest().permitAll();
+                .anyRequest().authenticated();
     }
 
     @Bean
