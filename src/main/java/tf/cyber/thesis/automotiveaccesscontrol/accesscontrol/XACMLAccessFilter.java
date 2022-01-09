@@ -84,7 +84,7 @@ public class XACMLAccessFilter extends OncePerRequestFilter {
                 Instant after = Instant.now();
 
                 int timeNs = after.getNano() - prev.getNano();
-                logger.info("XACML policy evaluaton took " + timeNs / 1000000 + " ms");
+                logger.info("XACML policy evaluaton took " + timeNs / 1000000 + " ms (" + timeNs / 1000 + " μs)");
             }
         } else {
             filterChain.doFilter(request, response);

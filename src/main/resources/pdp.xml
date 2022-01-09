@@ -5,5 +5,5 @@
         <policyLocation>policies/permit-all.xml</policyLocation>
     </policyProvider>
 
-    <rootPolicyRef>time-test</rootPolicyRef>
+    <rootPolicyRef>permit-all</rootPolicyRef>
 </pdp>

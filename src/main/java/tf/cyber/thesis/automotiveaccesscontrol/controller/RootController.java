@@ -9,4 +9,9 @@ public class RootController {
     public String rootPage() {
         return "Hey there!";
     }
+
+    @RequestMapping("/vehicle")
+    public String vehiclePage() {
+        return "This is some vehicle data!";
+    }
 }
