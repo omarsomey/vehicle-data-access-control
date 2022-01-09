@@ -25,22 +25,22 @@ import java.util.Optional;
 
 import static org.ow2.authzforce.xacml.identifiers.XacmlAttributeCategory.*;
 
-public class XACMLInterceptor extends OncePerRequestFilter {
+public class XACMLAccessFilter extends OncePerRequestFilter {
 
     public static final String XACML_PROTECTED_PATH = "/";
 
-    private final Logger logger = LoggerFactory.getLogger(XACMLInterceptor.class);
+    private final Logger logger = LoggerFactory.getLogger(XACMLAccessFilter.class);
 
     // Instantiate PDP which also loads policies from disk.
     private final PdpEngineConfiguration pdpEngineConf;
     final BasePdpEngine pdpEngine;
 
-    public XACMLInterceptor() throws IOException {
+    public XACMLAccessFilter() throws IOException {
         super();
 
         logger.info("Loading XACML policy configuration.");
         pdpEngineConf = PdpEngineConfiguration
-                .getInstance("C:\\Users\\simon\\Development\\automotive-access-control\\src\\main\\resources\\xacml\\pdp.xml");
+                .getInstance("C:\\Users\\simon\\Development\\automotive-access-control\\src\\main\\resources\\pdp.xml");
 
         logger.info("Instantiating XACML PDP Engine.");
         pdpEngine = new BasePdpEngine(pdpEngineConf);
