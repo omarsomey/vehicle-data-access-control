@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.ow2.authzforce.xacml.identifiers.XacmlAttributeCategory.*;
@@ -31,20 +33,29 @@ public class XACMLAccessFilter extends OncePerRequestFilter {
 
     private final Logger logger = LoggerFactory.getLogger(XACMLAccessFilter.class);
 
-    // Instantiate PDP which also loads policies from disk.
+    private final String PDP_CONFIG_PATH = ResourceUtils.getFile(
+            Objects.requireNonNull(this.getClass().getResource("/pdp.xml")))
+            .getAbsolutePath();
+    private final String PDP_CATALOG_PATH = ResourceUtils.getFile(
+            Objects.requireNonNull(this.getClass().getResource("/catalog.xml")))
+            .getAbsolutePath();
+    private final String PDP_EXTENSION_PATH = ResourceUtils.getFile(
+            Objects.requireNonNull(this.getClass().getResource("/pdp-ext.xsd")))
+            .getAbsolutePath();
+
     private final PdpEngineConfiguration pdpEngineConf;
     final BasePdpEngine pdpEngine;
 
     public XACMLAccessFilter() throws IOException {
         super();
 
+        // Instantiate PDP which also loads policies from disk.
         logger.info("Loading XACML policy configuration.");
         pdpEngineConf = PdpEngineConfiguration
-                .getInstance("C:\\Users\\simon\\Development\\automotive-access-control\\src\\main\\resources\\pdp.xml");
+                .getInstance(PDP_CONFIG_PATH, PDP_CATALOG_PATH, PDP_EXTENSION_PATH);
 
         logger.info("Instantiating XACML PDP Engine.");
         pdpEngine = new BasePdpEngine(pdpEngineConf);
-
     }
 
     @Override
