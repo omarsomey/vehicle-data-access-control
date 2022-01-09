@@ -62,7 +62,7 @@ public class XACMLAccessFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (request.getServletPath().startsWith(XACML_PROTECTED_PATH)) {
-            Instant prev = Instant.now();
+            long prev = System.nanoTime();
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -70,25 +70,26 @@ public class XACMLAccessFilter extends OncePerRequestFilter {
                 // Rethink this: Does XACML support anonymous access?
                 logger.info("XACML evaluation failed for anonymous user: " + request.getRequestURI());
                 response.sendError(403);
+                return;
             } else {
                 DecisionType decision = XACMLAuthorize(authentication, request);
 
                 if (decision == DecisionType.PERMIT) {
                     logger.info("XACML policy evaluation PERMIT: " + request.getRequestURI());
-                    filterChain.doFilter(request, response);
                 } else {
                     logger.info("XACML policy evaluation DENY: " + request.getRequestURI());
                     response.sendError(403);
+                    return;
                 }
 
-                Instant after = Instant.now();
+                long after = System.nanoTime();
 
-                int timeNs = after.getNano() - prev.getNano();
-                logger.info("XACML policy evaluaton took " + timeNs / 1000000 + " ms (" + timeNs / 1000 + " μs)");
+                long timeNs = after - prev;
+                logger.info("XACML policy evaluaton took " + timeNs / 1000000d + " ms (" + timeNs / 1000d + " μs / " + timeNs + "ns)");
             }
-        } else {
-            filterChain.doFilter(request, response);
         }
+
+        filterChain.doFilter(request, response);
     }
 
     public DecisionType XACMLAuthorize(Authentication authentication, HttpServletRequest request) throws IOException {
