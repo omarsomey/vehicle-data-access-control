@@ -93,7 +93,7 @@ public class XACMLAccessFilter extends OncePerRequestFilter {
 
     public DecisionType XACMLAuthorize(Authentication authentication, HttpServletRequest request) throws IOException {
         // Instantiate request document.
-        final DecisionRequestBuilder<?> requestBuilder = pdpEngine.newRequestBuilder(-1, -1);
+        final DecisionRequestBuilder<?> requestBuilder = pdpEngine.newRequestBuilder(3, 3);
 
         // Gather information from requesting subject.
         final AttributeFqn subjectIdAttributeId = AttributeFqns.newInstance(XACML_1_0_ACCESS_SUBJECT.value(),
