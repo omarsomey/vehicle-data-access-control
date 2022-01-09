@@ -33,13 +33,13 @@ public class XACMLAccessFilter extends OncePerRequestFilter {
     private final Logger logger = LoggerFactory.getLogger(XACMLAccessFilter.class);
 
     private final String PDP_CONFIG_PATH = ResourceUtils.getFile(
-            Objects.requireNonNull(this.getClass().getResource("/pdp.xml")))
+                    Objects.requireNonNull(this.getClass().getResource("/pdp.xml")))
             .getAbsolutePath();
     private final String PDP_CATALOG_PATH = ResourceUtils.getFile(
-            Objects.requireNonNull(this.getClass().getResource("/catalog.xml")))
+                    Objects.requireNonNull(this.getClass().getResource("/catalog.xml")))
             .getAbsolutePath();
     private final String PDP_EXTENSION_PATH = ResourceUtils.getFile(
-            Objects.requireNonNull(this.getClass().getResource("/pdp-ext.xsd")))
+                    Objects.requireNonNull(this.getClass().getResource("/pdp-ext.xsd")))
             .getAbsolutePath();
 
     private final PdpEngineConfiguration pdpEngineConf;
@@ -61,8 +61,6 @@ public class XACMLAccessFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (request.getServletPath().startsWith(XACML_PROTECTED_PATH)) {
-            long prev = System.nanoTime();
-
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (authentication == null) {
@@ -70,21 +68,22 @@ public class XACMLAccessFilter extends OncePerRequestFilter {
                 logger.info("XACML evaluation failed for anonymous user: " + request.getRequestURI());
                 response.sendError(403);
                 return;
+            }
+
+            long prev = System.nanoTime();
+
+            DecisionType decision = XACMLAuthorize(authentication, request);
+
+            long after = System.nanoTime();
+            long timeNs = after - prev;
+            logger.info("XACML policy evaluaton took " + timeNs / 1000000d + " ms (" + timeNs / 1000d + " μs / " + timeNs + "ns)");
+
+            if (decision == DecisionType.PERMIT) {
+                logger.info("XACML policy evaluation PERMIT: " + request.getRequestURI());
             } else {
-                DecisionType decision = XACMLAuthorize(authentication, request);
-
-                if (decision == DecisionType.PERMIT) {
-                    logger.info("XACML policy evaluation PERMIT: " + request.getRequestURI());
-                } else {
-                    logger.info("XACML policy evaluation DENY: " + request.getRequestURI());
-                    response.sendError(403);
-                    return;
-                }
-
-                long after = System.nanoTime();
-
-                long timeNs = after - prev;
-                logger.info("XACML policy evaluaton took " + timeNs / 1000000d + " ms (" + timeNs / 1000d + " μs / " + timeNs + "ns)");
+                logger.info("XACML policy evaluation DENY: " + request.getRequestURI());
+                response.sendError(403);
+                return;
             }
         }
 
