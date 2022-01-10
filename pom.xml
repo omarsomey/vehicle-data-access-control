@@ -58,7 +58,7 @@
 		</dependency>
 		<dependency>
 			<groupId>tf.cyber.xacml</groupId>
-			<artifactId>xacml-location-provider</artifactId>
+			<artifactId>authzforce-geolocation-provider</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
