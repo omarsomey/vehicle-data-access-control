@@ -1,29 +1,33 @@
-package tf.cyber.obdii;
+package tf.cyber.obdii.io;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;
-import tf.cyber.obdii.commands.debug.ELMVersionInformation;
+import tf.cyber.obdii.commands.OBD2Command;
+import tf.cyber.obdii.commands.connection.DisableHeader;
+import tf.cyber.obdii.commands.connection.EnableHeader;
 import tf.cyber.obdii.exceptions.TimeoutException;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class OBD2Connection {
 
     public static final int TIMEOUT_MSEC = 2000;
 
-    private SerialPort port;
+    private final SerialPort port;
 
-    public static void main(String[] args) throws IOException, SerialPortException, InterruptedException {
+    public static void main(String[] args) throws SerialPortException {
         OBD2Connection conn = new OBD2Connection("/dev/ttyUSB0");
-        conn.write(new ELMVersionInformation());
 
-        String res = conn.read();
-        System.out.println(res);
+        DisableHeader cmd = new DisableHeader();
+        cmd.execute(conn);
+
+        EnableHeader cmd2 = new EnableHeader();
+        cmd2.execute(conn);
+
         conn.close();
     }
 
-    private String read() throws SerialPortException {
+    public String read() throws SerialPortException {
         final StringBuilder buf = new StringBuilder();
         final long start = System.currentTimeMillis();
 
@@ -55,15 +59,15 @@ public class OBD2Connection {
         }
     }
 
-    public void write(OBD2Command command) throws SerialPortException {
-        port.writeBytes((command.getCommand()+ "\r").getBytes(StandardCharsets.US_ASCII));
+    public void write(OBD2Command<?> command) throws SerialPortException {
+        port.writeBytes((command.command()+ "\r").getBytes(StandardCharsets.US_ASCII));
     }
 
     public void close() throws SerialPortException {
         port.closePort();
     }
 
-    public OBD2Connection(String portIdentifier) throws IOException, SerialPortException, InterruptedException {
+    public OBD2Connection(String portIdentifier) throws SerialPortException {
         this.port = new SerialPort("/dev/ttyUSB0");
         port.openPort();
         port.setParams(SerialPort.BAUDRATE_38400,
