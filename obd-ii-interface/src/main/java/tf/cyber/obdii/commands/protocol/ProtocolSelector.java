@@ -19,6 +19,11 @@ public class ProtocolSelector extends OBD2Command<String>  {
         return rawData;
     }
 
+    @Override
+    public String getFriendlyName() {
+        return "Select protocol";
+    }
+
     public enum Protocol {
         AUTOMATIC(0),
         SAE_J1850_PWM(1),

@@ -29,6 +29,12 @@ public class OBD2Connection {
         proto.execute(conn);
         System.out.println(proto.result());
 
+        for (int i = 0; i < 1000; i++) {
+            ProtocolSelector proto2 = new ProtocolSelector(ProtocolSelector.Protocol.AUTOMATIC);
+            proto2.execute(conn);
+            System.out.println(proto2.result());
+        }
+
         conn.close();
     }
 
@@ -73,7 +79,7 @@ public class OBD2Connection {
     }
 
     public OBD2Connection(String portIdentifier) throws SerialPortException {
-        this.port = new SerialPort("/dev/ttyUSB0");
+        this.port = new SerialPort(portIdentifier);
         port.openPort();
         port.setParams(SerialPort.BAUDRATE_38400,
                 SerialPort.DATABITS_8,

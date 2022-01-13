@@ -12,4 +12,9 @@ public class EnableHeader extends OBD2Command<String> {
     public String result() {
         return rawData;
     }
+
+    @Override
+    public String getFriendlyName() {
+        return "Enable Header";
+    }
 }

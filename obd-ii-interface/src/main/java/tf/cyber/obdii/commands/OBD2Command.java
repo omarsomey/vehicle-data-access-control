@@ -12,6 +12,8 @@ public abstract class OBD2Command<R> {
 
     public abstract R result();
 
+    public abstract String getFriendlyName();
+
     public void execute(OBD2Connection connection) throws SerialPortException {
         connection.write(this);
 
