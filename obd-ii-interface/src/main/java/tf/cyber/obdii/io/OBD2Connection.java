@@ -13,10 +13,11 @@ import java.nio.charset.StandardCharsets;
 public class OBD2Connection {
 
     public static final int TIMEOUT_MSEC = 2000;
+    public static final int READ_BACKOFF_DELAY_MS = 10;
 
     private final SerialPort port;
 
-    public static void main(String[] args) throws SerialPortException {
+    public static void main(String[] args) throws SerialPortException, InterruptedException {
         OBD2Connection conn = new OBD2Connection("/dev/ttyUSB0");
 
         DisableHeader cmd = new DisableHeader();
@@ -38,7 +39,7 @@ public class OBD2Connection {
         conn.close();
     }
 
-    public String read() throws SerialPortException {
+    public String read() throws SerialPortException, InterruptedException {
         final StringBuilder buf = new StringBuilder();
         final long start = System.currentTimeMillis();
 
@@ -51,6 +52,7 @@ public class OBD2Connection {
             // If no, wait and go do something else.
             if (port.getInputBufferBytesCount() == 0) {
                 Thread.yield();
+                Thread.sleep(READ_BACKOFF_DELAY_MS);
             } else {
                 byte[] data = port.readBytes();
                 String str = new String(data);
