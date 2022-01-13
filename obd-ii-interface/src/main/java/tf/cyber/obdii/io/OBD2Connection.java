@@ -5,6 +5,7 @@ import jssc.SerialPortException;
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.commands.connection.DisableHeader;
 import tf.cyber.obdii.commands.connection.EnableHeader;
+import tf.cyber.obdii.commands.protocol.ProtocolSelector;
 import tf.cyber.obdii.exceptions.TimeoutException;
 
 import java.nio.charset.StandardCharsets;
@@ -23,6 +24,10 @@ public class OBD2Connection {
 
         EnableHeader cmd2 = new EnableHeader();
         cmd2.execute(conn);
+
+        ProtocolSelector proto = new ProtocolSelector(ProtocolSelector.Protocol.AUTOMATIC);
+        proto.execute(conn);
+        System.out.println(proto.result());
 
         conn.close();
     }
