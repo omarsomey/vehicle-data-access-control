@@ -76,12 +76,12 @@ public class XACMLAccessFilter extends OncePerRequestFilter {
 
             long after = System.nanoTime();
             long timeNs = after - prev;
-            logger.info("XACML policy evaluaton took " + timeNs / 1000000d + " ms (" + timeNs / 1000d + " μs / " + timeNs + "ns)");
+            logger.info("[XACML] Evaluation took " + timeNs / 1000000d + " ms (" + timeNs / 1000d + " μs / " + timeNs + "ns)");
 
             if (decision == DecisionType.PERMIT) {
-                logger.info("XACML policy evaluation PERMIT: " + request.getRequestURI());
+                logger.info("[XACML] PERMIT: " + request.getRequestURI());
             } else {
-                logger.info("XACML policy evaluation DENY: " + request.getRequestURI());
+                logger.info("[XACML] DENY: " + request.getRequestURI());
                 response.sendError(403);
                 return;
             }
