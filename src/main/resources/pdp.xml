@@ -20,9 +20,16 @@
     <function>urn:ogc:def:function:geoxacml:1.0:geometry-bag-subset</function>
     <function>urn:ogc:def:function:geoxacml:1.0:geometry-set-equals</function>
 
+    <attributeProvider
+            id="gps"
+            xmlns:gps="http://cyber.tf/xacml/location/gpslocation"
+            xsi:type="gps:GPSLocationProviderDescriptor"
+            xmlns:xacml="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+            serialPath="localhost" />
+
     <policyProvider id="policyProvider" xsi:type="StaticPolicyProvider">
-        <policyLocation>policies/location-test.xml</policyLocation>
+        <policyLocation>policies/provider-test.xml</policyLocation>
     </policyProvider>
 
-    <rootPolicyRef>location-test</rootPolicyRef>
+    <rootPolicyRef>provider-test</rootPolicyRef>
 </pdp>

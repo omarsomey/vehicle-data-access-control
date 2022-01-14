@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<PolicySet xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17" PolicySetId="provider-test"
+           Version="1.0"
+           PolicyCombiningAlgId="urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:deny-unless-permit">
+    <Description>PIP-provider-related policies</Description>
+
+    <Target/>
+
+    <Policy
+            Version="1.0"
+            PolicyId="ProviderTest"
+            RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-overrides">
+
+        <Target/>
+
+        <Rule
+                Effect="Permit"
+                RuleId="PermitTest">
+
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">yeet</AttributeValue>
+
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+                        <AttributeDesignator DataType="http://www.w3.org/2001/XMLSchema#string"
+                                             AttributeId="tf.cyber.xacml.location.gpslocation"
+                                             Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
+                                             MustBePresent="true"/>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+    </Policy>
+</PolicySet>

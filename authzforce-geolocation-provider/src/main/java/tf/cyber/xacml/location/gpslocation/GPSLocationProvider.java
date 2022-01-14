@@ -1,13 +1,8 @@
-package tf.cyber.xacml;
+package tf.cyber.xacml.location.gpslocation;
 
-import oasis.names.tc.xacml._3_0.core.schema.wd_17.Attribute;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.AttributeDesignatorType;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.Attributes;
 import org.ow2.authzforce.core.pdp.api.*;
-import org.ow2.authzforce.core.pdp.api.io.NamedXacmlAttributeParser;
-import org.ow2.authzforce.core.pdp.api.io.NonIssuedLikeIssuedStrictXacmlAttributeParser;
-import org.ow2.authzforce.core.pdp.api.io.XacmlJaxbParsingUtils;
-import org.ow2.authzforce.core.pdp.api.io.XacmlRequestAttributeParser;
 import org.ow2.authzforce.core.pdp.api.value.*;
 import org.ow2.authzforce.xacml.identifiers.XacmlStatusCode;
 
@@ -21,10 +16,13 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
     private final Set<AttributeDesignatorType> supportedDesignatorTypes;
     private final Map<AttributeFqn, AttributeBag<?>> attrMap;
 
+    public final static String ID = "tf.cyber.xacml.location.gpslocation";
+
     private GPSLocationProvider(final String id,
                                 final Map<AttributeFqn, AttributeBag<?>> attributeMap) throws IllegalArgumentException {
-        super(id);
+        super(ID);
         attrMap = Collections.unmodifiableMap(attributeMap);
+
         this.supportedDesignatorTypes =
                 attrMap.entrySet().stream().map(GPSLocationProvider::newAttributeDesignator).collect(Collectors.toUnmodifiableSet());
     }
@@ -88,7 +86,7 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
         public CloseableNamedAttributeProvider getInstance(AttributeValueFactoryRegistry attributeValueFactoryRegistry,
                                                            AttributeProvider attributeProvider) {
             {
-                final NamedXacmlAttributeParser<Attribute> namedXacmlAttParser =
+                /*final NamedXacmlAttributeParser<Attribute> namedXacmlAttParser =
                         new XacmlJaxbParsingUtils.NamedXacmlJaxbAttributeParser(attributeValueFactoryRegistry);
                 final XacmlRequestAttributeParser<Attribute, AttributeBag<?>> xacmlAttributeParser = new NonIssuedLikeIssuedStrictXacmlAttributeParser<>(namedXacmlAttParser);
                 final Set<String> attrCategoryNames = new HashSet<>();
@@ -104,9 +102,19 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
                         xacmlAttributeParser.parseNamedAttribute(categoryName, jaxbAttr, null,
                                                                  mutableAttMap);
                     }
-                }
+                }*/
 
-                return new GPSLocationProvider(this.providerId, mutableAttMap);
+                List<StringValue> lst = new LinkedList<>();
+                lst.add(new StringValue("TEST"));
+
+                AttributeBag<?> bag = Bags.newAttributeBag(StandardDatatypes.STRING, lst, AttributeSources.PDP);
+
+                final Map<AttributeFqn, AttributeBag<?>> attributeMap = new HashMap<>();
+
+                AttributeFqn fqn = AttributeFqns.newInstance("urn:oasis:names:tc:xacml:3.0:attribute-category:environment", Optional.empty(), "tf.cyber.xacml.location.gpslocation");
+                attributeMap.put(fqn, bag);
+
+                return new GPSLocationProvider(this.providerId, attributeMap);
             }
         }
     }
@@ -119,7 +127,7 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
 
         @Override
         public CloseableNamedAttributeProvider.DependencyAwareFactory getInstance(GPSLocationProviderDescriptor conf, EnvironmentProperties environmentProperties) throws IllegalArgumentException {
-            return new DependencyAwareAttributeProviderFactory(conf.getId(), conf.getAttributes());
+            return new DependencyAwareAttributeProviderFactory(conf.getId(), new LinkedList<>());
         }
     }
 }
