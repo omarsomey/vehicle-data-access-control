@@ -50,12 +50,12 @@ public class VK162Connection {
 
         double latitude = -1.0d;
         if (!fragments[2].equals("")) {
-            latitude = Double.parseDouble(fragments[2]);
+            latitude = calculateLatLonFromNMEA(fragments[2]);
         }
 
         double longitude = -1.0d;
         if (!fragments[4].equals("")) {
-            longitude = Double.parseDouble(fragments[4]);
+            longitude = calculateLatLonFromNMEA(fragments[4]);
         }
 
         GPSData.GPSQuality quality =
@@ -91,5 +91,23 @@ public class VK162Connection {
     public void close() {
         this.channel.close();
         connection = null;
+    }
+
+    private static double calculateLatLonFromNMEA(String input) {
+        String[] parts = input.split("\\.");
+        String first = parts[0];
+        String second = parts[1];
+
+        // Two last second digits in first are minutes, rest are hours
+        int digitCount = first.length();
+        int digitSplit = digitCount == 4 ? 2 : 3;
+
+        int hours = Integer.parseInt(first.substring(0, digitSplit));
+        double minutes = Integer.parseInt(first.substring(digitSplit));
+
+        // Second part are minute decimal places.
+        minutes += Double.parseDouble("0." + second);
+
+        return hours + (minutes / 60);
     }
 }
