@@ -25,7 +25,7 @@
             xmlns:gps="http://cyber.tf/xacml/location/gpslocation"
             xsi:type="gps:GPSLocationProviderDescriptor"
             xmlns:xacml="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
-            serialPath="localhost" />
+            gpsURL="http://localhost:8081/" />
 
     <policyProvider id="policyProvider" xsi:type="StaticPolicyProvider">
         <policyLocation>policies/provider-test.xml</policyLocation>

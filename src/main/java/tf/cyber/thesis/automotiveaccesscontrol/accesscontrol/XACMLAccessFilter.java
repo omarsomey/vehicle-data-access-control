@@ -32,15 +32,9 @@ public class XACMLAccessFilter extends OncePerRequestFilter {
 
     private final Logger logger = LoggerFactory.getLogger(XACMLAccessFilter.class);
 
-    private final String PDP_CONFIG_PATH = ResourceUtils.getFile(
-                    Objects.requireNonNull(this.getClass().getResource("/pdp.xml")))
-            .getAbsolutePath();
-    private final String PDP_CATALOG_PATH = ResourceUtils.getFile(
-                    Objects.requireNonNull(this.getClass().getResource("/catalog.xml")))
-            .getAbsolutePath();
-    private final String PDP_EXTENSION_PATH = ResourceUtils.getFile(
-                    Objects.requireNonNull(this.getClass().getResource("/pdp-ext.xsd")))
-            .getAbsolutePath();
+    private final String PDP_CONFIG_PATH = "pdp/pdp.xml";
+    private final String PDP_CATALOG_PATH = "pdp/catalog.xml";
+    private final String PDP_EXTENSION_PATH = "pdp/pdp-ext.xsd";
 
     private final PdpEngineConfiguration pdpEngineConf;
     final BasePdpEngine pdpEngine;

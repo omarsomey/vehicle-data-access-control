@@ -17,7 +17,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.ow2.authzforce" additivity="false" level="INFO">
+    <logger name="org.ow2.authzforce" additivity="false" level="DEBUG">
         <appender-ref ref="stdout" />
     </logger>
     <!-- HTTP/JAX-RS/SOAP request/response debugging -->

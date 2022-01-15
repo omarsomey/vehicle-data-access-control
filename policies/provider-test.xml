@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
 <PolicySet xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17" PolicySetId="provider-test"
+           xmlns:geoxacml="http://www.opengis.net/geoxacml"
            Version="1.0"
            PolicyCombiningAlgId="urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:deny-unless-permit">
     <Description>PIP-provider-related policies</Description>
@@ -19,15 +20,18 @@
                 RuleId="PermitTest">
 
             <Condition>
-                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
-                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">TEST</AttributeValue>
+                <Apply FunctionId="urn:ogc:def:function:geoxacml:1.0:geometry-contains">
+                    <AttributeValue DataType="urn:ogc:def:dataType:geoxacml:1.0:geometry"
+                                    geoxacml:crs="EPSG:4326">POLYGON ((-2.0 -2.0, 0.0 -2.0, 0.0 2.0, -2.0 2.0, -2.0 -2.0)) </AttributeValue>
 
-                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
-                        <AttributeDesignator DataType="http://www.w3.org/2001/XMLSchema#string"
-                                             AttributeId="tf.cyber.xacml.location.gpslocation"
+                    <Apply FunctionId="urn:ogc:def:function:geoxacml:1.0:geometry-one-and-only">
+                        <AttributeDesignator DataType="urn:ogc:def:dataType:geoxacml:1.0:geometry"
+                                             AttributeId="urn:tf:cyber:xacml:location:gpslocation"
                                              Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
-                                             MustBePresent="true"/>
+                                             MustBePresent="true"
+                        />
                     </Apply>
+
                 </Apply>
             </Condition>
         </Rule>

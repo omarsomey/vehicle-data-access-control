@@ -1,10 +1,10 @@
-package tf.cyber.thesis.automotiveaccesscontrol;
+package tf.cyber.gps.microservice.gpsmicroservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AutomotiveAccessControlApplicationTests {
+class GpsMicroserviceApplicationTests {
 
 	@Test
 	void contextLoads() {

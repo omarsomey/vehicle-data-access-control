@@ -1,6 +1,7 @@
 package tf.cyber.obdii.io;
 
 import jssc.SerialPort;
+import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.commands.connection.DisableHeader;

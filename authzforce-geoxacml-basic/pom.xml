@@ -4,8 +4,11 @@
 	<groupId>de.securedimensions.geoxacml</groupId>
 	<artifactId>authzforce-geoxacml-basic</artifactId>
 	<version>0.4.1</version>
-	<name>authzforce-geoxacml-basic-0.4.1.jar</name>
 	<description>GeoXACML Basic Implementation</description>
+	<name>authzforce-geoxacml-basic-0.4.1.jar</name>
+
+	<packaging>jar</packaging>
+
 	<organization>
 		<name>Secure Dimensions GmbH</name>
 		<url>https://www.secure-dimensions.de</url>
