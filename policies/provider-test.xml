@@ -22,7 +22,9 @@
             <Condition>
                 <Apply FunctionId="urn:ogc:def:function:geoxacml:1.0:geometry-contains">
                     <AttributeValue DataType="urn:ogc:def:dataType:geoxacml:1.0:geometry"
-                                    geoxacml:crs="EPSG:4326">POLYGON ((-2.0 -2.0, 0.0 -2.0, 0.0 2.0, -2.0 2.0, -2.0 -2.0)) </AttributeValue>
+                                    geoxacml:crs="EPSG:4326">POLYGON ((48.569555 13.455306,
+                        48.568476 13.456456, 48.563861 13.449563, 48.565125 13.446794, 48.568334 13.452677,
+                        48.569555 13.455306)) </AttributeValue>
 
                     <Apply FunctionId="urn:ogc:def:function:geoxacml:1.0:geometry-one-and-only">
                         <AttributeDesignator DataType="urn:ogc:def:dataType:geoxacml:1.0:geometry"
