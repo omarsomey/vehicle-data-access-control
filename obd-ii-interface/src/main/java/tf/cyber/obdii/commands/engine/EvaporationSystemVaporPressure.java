@@ -13,6 +13,7 @@ public class EvaporationSystemVaporPressure extends OBD2Command<Double> {
     public Double result() {
         int[] bytes = ByteUtils.extractBytes(rawData);
 
+        // TODO: a und b sind zweierkomplement!
         int a = bytes[bytes.length - 2];
         int b = bytes[bytes.length - 1];
 
