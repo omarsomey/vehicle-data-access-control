@@ -1,22 +1,22 @@
-package tf.cyber.obdii.commands.engine;
+package tf.cyber.obdii.commands.vehicle;
 
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.util.ByteUtils;
 
-public class OxygenSensor7Voltage extends OBD2Command<Double>{
+public class WamUpsSinceCodesCleared extends OBD2Command<Integer> {
     @Override
     public String command() {
-        return "01 1A";
+        return "01 30";
     }
 
     @Override
-    public Double result() {
+    public Integer result() {
         int[] bytes = ByteUtils.extractBytes(rawData);
-        return bytes[bytes.length - 2] / 200d;
+        return bytes[bytes.length - 1];
     }
 
     @Override
     public String getFriendlyName() {
-        return "Oxygen Sensor 7 - Voltage";
+        return "Warm-ups since codes cleared";
     }
 }

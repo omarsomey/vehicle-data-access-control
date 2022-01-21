@@ -1,22 +1,22 @@
-package tf.cyber.obdii.commands.engine;
+package tf.cyber.obdii.commands.emission;
 
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.util.ByteUtils;
 
-public class OxygenSensor8Voltage extends OBD2Command<Double>{
+public class ExhaustGasRecirculationError extends OBD2Command<Double> {
     @Override
     public String command() {
-        return "01 1B";
+        return "01 2D";
     }
 
     @Override
     public Double result() {
         int[] bytes = ByteUtils.extractBytes(rawData);
-        return bytes[bytes.length - 2] / 200d;
+        return ((100d/128d) * bytes[bytes.length -1]) - 100;
     }
 
     @Override
     public String getFriendlyName() {
-        return "Oxygen Sensor 8 - Voltage";
+        return "EGR Error";
     }
 }

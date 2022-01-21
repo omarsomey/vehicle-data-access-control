@@ -3,20 +3,20 @@ package tf.cyber.obdii.commands.engine;
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.util.ByteUtils;
 
-public class OxygenSensor1Voltage extends OBD2Command<Double>{
+public class AbsoluteBarometricPressure extends OBD2Command<Integer> {
     @Override
     public String command() {
-        return "01 14";
+        return "01 33";
     }
 
     @Override
-    public Double result() {
+    public Integer result() {
         int[] bytes = ByteUtils.extractBytes(rawData);
-        return bytes[bytes.length - 2] / 200d;
+        return bytes[bytes.length - 1];
     }
 
     @Override
     public String getFriendlyName() {
-        return "Oxygen Sensor 1 - Voltage";
+        return "Absolute Barometric Pressure";
     }
 }

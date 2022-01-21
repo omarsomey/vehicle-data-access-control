@@ -20,9 +20,9 @@ public class SupportedPID0to20 extends OBD2Command<List<Class<OBD2Command<?>>>> 
             {EngineCoolantTemperature.class, ShortTermFuelTrimBank1.class, LongTermFuelTrimBank1.class, ShortTermFuelTrimBank2.class},
             {LongTermFuelTrimBank2.class, FuelPressure.class, IntakeManifoldAbsolutePressure.class, EngineSpeed.class},
             {VehicleSpeed.class, TimingAdvance.class, IntakeAirTemperature.class, MassAirFlowRate.class},
-            {ThrottlePosition.class, CommandedSecondaryAirStatus.class, OxygenSensorsPresent.class, OxygenSensor1Voltage.class},
-            {OxygenSensor2Voltage.class, OxygenSensor3Voltage.class, OxygenSensor4Voltage.class, OxygenSensor5Voltage.class},
-            {OxygenSensor6Voltage.class, OxygenSensor7Voltage.class, OxygenSensor8Voltage.class, OBDStandardCompliance.class},
+            {ThrottlePosition.class, CommandedSecondaryAirStatus.class, OxygenSensorsPresent.class, OxygenSensor1.class},
+            {OxygenSensor2.class, OxygenSensor3.class, OxygenSensor4.class, OxygenSensor5.class},
+            {OxygenSensor6.class, OxygenSensor7.class, OxygenSensor8.class, OBDStandardCompliance.class},
             {OxygenSensorsPresentFourBanks.class, AuxillaryInputStatus.class, RuntimeSinceEngineStart.class, SupportedPID21to40.class}
     };
 
