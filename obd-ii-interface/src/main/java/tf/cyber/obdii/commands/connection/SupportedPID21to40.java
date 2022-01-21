@@ -1,6 +1,9 @@
 package tf.cyber.obdii.commands.connection;
 
 import tf.cyber.obdii.commands.OBD2Command;
+import tf.cyber.obdii.commands.engine.CommandedExhaustGasRecirculation;
+import tf.cyber.obdii.commands.engine.EvaporationSystemVaporPressure;
+import tf.cyber.obdii.commands.engine.ExhaustGasRecirculationError;
 import tf.cyber.obdii.commands.engine.*;
 import tf.cyber.obdii.commands.fuel.*;
 import tf.cyber.obdii.commands.vehicle.*;
@@ -13,14 +16,14 @@ import java.util.List;
 
 public class SupportedPID21to40 extends OBD2Command<List<Class<OBD2Command<?>>>> {
     private static final Class<OBD2Command<?>>[][] PID_INDEX = new Class[][]{
-            {DistanceTraveledWithMalfunctionIndicatorLamp.class, FuelRailPressure.class, FuelRailGaugePressure.class, null},
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null}
+            {DistanceTraveledWithMalfunctionIndicatorLamp.class, FuelRailPressure.class, FuelRailGaugePressure.class, OxygenSensor1Secondary.class},
+            {OxygenSensor2Secondary.class, OxygenSensor3Secondary.class, OxygenSensor4Secondary.class, OxygenSensor5Secondary.class},
+            {OxygenSensor6Secondary.class, OxygenSensor7Secondary.class, OxygenSensor8Secondary.class, CommandedExhaustGasRecirculation.class},
+            {ExhaustGasRecirculationError.class, CommandedEvaporativePurge.class, FuelTankLevelInput.class, WarmUpsSinceCodesCleared.class},
+            {DistanceTraveledSinceCodesCleared.class, EvaporationSystemVaporPressure.class, AbsoluteBarometricPressure.class, OxygenSensor1Tertiary.class},
+            {OxygenSensor2Tertiary.class, OxygenSensor3Tertiary.class, OxygenSensor4Tertiary.class, OxygenSensor5Tertiary.class},
+            {OxygenSensor6Tertiary.class, OxygenSensor7Tertiary.class, OxygenSensor8Tertiary.class, CatalystTemperatureBank1Sensor1.class},
+            {CatalystTemperatureBank2Sensor1.class, CatalystTemperatureBank1Sensor2.class, CatalystTemperatureBank2Sensor2.class, SupportedPID41to60.class}
     };
 
     @Override

@@ -1,22 +1,22 @@
-package tf.cyber.obdii.commands.vehicle;
+package tf.cyber.obdii.commands.engine;
 
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.util.ByteUtils;
 
-public class WamUpsSinceCodesCleared extends OBD2Command<Integer> {
+public class CommandedExhaustGasRecirculation extends OBD2Command<Double> {
     @Override
     public String command() {
-        return "01 30";
+        return "01 2C";
     }
 
     @Override
-    public Integer result() {
+    public Double result() {
         int[] bytes = ByteUtils.extractBytes(rawData);
-        return bytes[bytes.length - 1];
+        return (100d/255d) / bytes[bytes.length - 1];
     }
 
     @Override
     public String getFriendlyName() {
-        return "Warm-ups since codes cleared";
+        return "Commanded EGR";
     }
 }
