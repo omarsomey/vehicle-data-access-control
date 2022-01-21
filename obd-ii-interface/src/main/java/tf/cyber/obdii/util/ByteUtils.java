@@ -13,25 +13,37 @@ public class ByteUtils {
         return result;
     }
 
-    public static String[] extractBytesRaw(String input) {
-        return input.split(" ");
-    }
-
-    public static Boolean[] byteToBoolean(int x) {
+    public static Boolean[] byteToBooleanFourBits(int x) {
         if (x < 0 || x > 255) {
             throw new NumberFormatException("Value out of range!");
         }
 
-        return byteToBoolean((byte) x);
+        return byteToBooleanFourBits((byte) x);
+    }
+
+    public static Boolean[] byteToBooleanFourBits(byte x) {
+        Boolean bool[] = new Boolean[4];
+
+        bool[0] = ((x & 0x01) != 0);
+        bool[1] = ((x & 0x02) != 0);
+        bool[2] = ((x & 0x04) != 0);
+        bool[3] = ((x & 0x08) != 0);
+
+        return bool;
     }
 
     public static Boolean[] byteToBoolean(byte x) {
-        Boolean bool[] = new Boolean[4];
+        Boolean bool[] = new Boolean[8];
 
-        bool[0] = ((x & 1) != 0);
-        bool[1] = ((x & 2) != 0);
-        bool[2] = ((x & 4) != 0);
-        bool[3] = ((x & 8) != 0);
+        bool[0] = ((x & 0x01) != 0);
+        bool[1] = ((x & 0x02) != 0);
+        bool[2] = ((x & 0x04) != 0);
+        bool[3] = ((x & 0x08) != 0);
+        bool[4] = ((x & 0x10) != 0);
+        bool[5] = ((x & 0x20) != 0);
+        bool[6] = ((x & 0x40) != 0);
+        bool[7] = ((x & 0x80) != 0);
+
 
         return bool;
     }
