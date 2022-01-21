@@ -1,22 +1,22 @@
-package tf.cyber.obdii.commands.engine;
+package tf.cyber.obdii.commands.fuel;
 
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.util.ByteUtils;
 
-public class EngineCoolantTemperature extends OBD2Command<Integer> {
+public class LongTermFuelTrimBank2 extends OBD2Command<Double> {
     @Override
     public String command() {
-        return "01 05";
+        return "01 09";
     }
 
     @Override
-    public Integer result() {
+    public Double result() {
         int[] bytes = ByteUtils.extractBytes(rawData);
-        return bytes[bytes.length - 1] - 40;
+        return ((100d / 128d) * bytes[bytes.length - 1] - 100d);
     }
 
     @Override
     public String getFriendlyName() {
-        return "Engine coolant temperature";
+        return "Long Term Fuel Trim — Bank 2";
     }
 }

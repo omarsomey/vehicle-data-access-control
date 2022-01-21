@@ -3,20 +3,24 @@ package tf.cyber.obdii.commands.engine;
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.util.ByteUtils;
 
-public class EngineCoolantTemperature extends OBD2Command<Integer> {
+public class EngineSpeed extends OBD2Command<Double> {
     @Override
     public String command() {
-        return "01 05";
+        return "01 0C";
     }
 
     @Override
-    public Integer result() {
+    public Double result() {
         int[] bytes = ByteUtils.extractBytes(rawData);
-        return bytes[bytes.length - 1] - 40;
+
+        int a = bytes[bytes.length - 2];
+        int b = bytes[bytes.length - 1];
+
+        return (256 * a + b) / 4d;
     }
 
     @Override
     public String getFriendlyName() {
-        return "Engine coolant temperature";
+        return "Engine Speed";
     }
 }

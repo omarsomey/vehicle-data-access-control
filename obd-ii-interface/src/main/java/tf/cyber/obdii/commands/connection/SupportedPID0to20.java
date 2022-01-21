@@ -1,36 +1,55 @@
 package tf.cyber.obdii.commands.connection;
 
 import tf.cyber.obdii.commands.OBD2Command;
+import tf.cyber.obdii.commands.engine.*;
+import tf.cyber.obdii.commands.fuel.*;
+import tf.cyber.obdii.commands.vehicle.VehicleSpeed;
 import tf.cyber.obdii.util.ByteUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SupportedPID0to20 extends OBD2Command<List<OBD2Command<?>>> {
+public class SupportedPID0to20 extends OBD2Command<List<Class<OBD2Command<?>>>> {
+    private static final Class<OBD2Command<?>>[][] PID_INDEX = new Class[][]{
+            {null, null, FuelSystemStatus.class, CalculatedEngineLoad.class},
+            {EngineCoolantTemperature.class, ShortTermFuelTrimBank1.class, LongTermFuelTrimBank1.class, ShortTermFuelTrimBank2.class},
+            {LongTermFuelTrimBank2.class, FuelPressure.class, IntakeManifoldAbsolutePressure.class, EngineSpeed.class},
+            {VehicleSpeed.class, TimingAdvance.class, IntakeAirTemperature.class, MassAirFlowRate.class},
+            {ThrottlePosition.class, CommandedSecondaryAirStatus.class, null, null},
+            {null, null, null, null},
+            {null, null, null, null},
+            {null, null, null, null}
+    };
+
     @Override
     public String command() {
         return "01 00";
     }
 
     @Override
-    public List<OBD2Command<?>> result() {
-        List<OBD2Command<?>> supportedCommands = new LinkedList<>();
+    public List<Class<OBD2Command<?>>> result() {
+        List<Class<OBD2Command<?>>> supportedCommands = new LinkedList<>();
 
         String [] bytesStr = ByteUtils.extractBytesRaw(rawData);
         String str = bytesStr[bytesStr.length - 4] + bytesStr[bytesStr.length - 3]
                 + bytesStr[bytesStr.length - 2] + bytesStr[bytesStr.length - 1];
 
-        byte[] bytes = str.getBytes(StandardCharsets.US_ASCII);
-        System.out.println(str);
+        String[] chars = str.split("");
 
-        for (int c = 0; c < bytes.length; c++) {
-            boolean[] mask = ByteUtils.byteToBoolean(bytes[c]);
-            System.out.println(Arrays.toString(mask));
+        for (int c = 0; c < chars.length; c++) {
+            int b = Integer.parseInt(chars[c], 16);
+
+            List<Boolean> mask = Arrays.asList(ByteUtils.byteToBoolean(b));
+            Collections.reverse(mask);
+
+            for (int i = 0; i < mask.size(); i++) {
+                supportedCommands.add(PID_INDEX[c][i]);
+            }
         }
 
-        return null;
+        return supportedCommands;
     }
 
     @Override

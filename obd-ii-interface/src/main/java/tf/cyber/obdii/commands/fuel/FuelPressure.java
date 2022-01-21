@@ -1,22 +1,22 @@
-package tf.cyber.obdii.commands.engine;
+package tf.cyber.obdii.commands.fuel;
 
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.util.ByteUtils;
 
-public class EngineCoolantTemperature extends OBD2Command<Integer> {
+public class FuelPressure extends OBD2Command<Integer> {
     @Override
     public String command() {
-        return "01 05";
+        return "01 0A";
     }
 
     @Override
     public Integer result() {
         int[] bytes = ByteUtils.extractBytes(rawData);
-        return bytes[bytes.length - 1] - 40;
+        return 3 * bytes[bytes.length - 1];
     }
 
     @Override
     public String getFriendlyName() {
-        return "Engine coolant temperature";
+        return "Fuel Pressure (kPa)";
     }
 }

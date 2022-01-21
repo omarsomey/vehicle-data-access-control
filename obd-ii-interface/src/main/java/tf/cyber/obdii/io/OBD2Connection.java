@@ -1,16 +1,10 @@
 package tf.cyber.obdii.io;
 
 import jssc.SerialPort;
-import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.commands.connection.*;
-import tf.cyber.obdii.commands.engine.CalculatedEngineLoad;
-import tf.cyber.obdii.commands.engine.EngineCoolantTemperature;
-import tf.cyber.obdii.commands.engine.RelativeThrottlePosition;
 import tf.cyber.obdii.commands.protocol.ProtocolSelector;
-import tf.cyber.obdii.commands.vehicle.AmbientAirTemperature;
-import tf.cyber.obdii.commands.vehicle.Odometer;
 import tf.cyber.obdii.exceptions.TimeoutException;
 
 import java.nio.charset.StandardCharsets;
