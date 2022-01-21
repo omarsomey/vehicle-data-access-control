@@ -5,22 +5,20 @@ import tf.cyber.obdii.util.ByteUtils;
 
 import java.util.Arrays;
 
-public class EngineCoolantTemperature extends OBD2Command<Double> {
+public class CalculatedEngineLoad extends OBD2Command<Double> {
     @Override
     public String command() {
-        return "01 05";
+        return "01 04";
     }
 
     @Override
     public Double result() {
-        System.out.println(rawData);
-        System.out.println(Arrays.toString(ByteUtils.extractBytes(rawData)));
-        // TODO: Implement this.
-        return 0d;
+        int[] bytes = ByteUtils.extractBytes(rawData);
+        return bytes[bytes.length - 1] / 255d;
     }
 
     @Override
     public String getFriendlyName() {
-        return "Engine coolant temperature";
+        return "Calculated Engine Load";
     }
 }

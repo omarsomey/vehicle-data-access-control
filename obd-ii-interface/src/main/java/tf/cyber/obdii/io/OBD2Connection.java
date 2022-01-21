@@ -4,9 +4,13 @@ import jssc.SerialPort;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
 import tf.cyber.obdii.commands.OBD2Command;
-import tf.cyber.obdii.commands.connection.DisableHeader;
-import tf.cyber.obdii.commands.connection.EnableHeader;
+import tf.cyber.obdii.commands.connection.*;
+import tf.cyber.obdii.commands.engine.CalculatedEngineLoad;
+import tf.cyber.obdii.commands.engine.EngineCoolantTemperature;
+import tf.cyber.obdii.commands.engine.RelativeThrottlePosition;
 import tf.cyber.obdii.commands.protocol.ProtocolSelector;
+import tf.cyber.obdii.commands.vehicle.AmbientAirTemperature;
+import tf.cyber.obdii.commands.vehicle.Odometer;
 import tf.cyber.obdii.exceptions.TimeoutException;
 
 import java.nio.charset.StandardCharsets;
@@ -21,21 +25,30 @@ public class OBD2Connection {
     public static void main(String[] args) throws SerialPortException, InterruptedException {
         OBD2Connection conn = new OBD2Connection("/dev/ttyUSB0");
 
+        ResetELM reset = new ResetELM();
+        reset.execute(conn);
+
         DisableHeader cmd = new DisableHeader();
         cmd.execute(conn);
 
-        EnableHeader cmd2 = new EnableHeader();
+        DisableEcho cmd2 = new DisableEcho();
         cmd2.execute(conn);
+
+        EnableHeader cmd3 = new EnableHeader();
+        cmd3.execute(conn);
+
+        DisableHeader cmd4 = new DisableHeader();
+        cmd4.execute(conn);
+
+        // With enabled header:
+        // 7E8 03 41 46 32
 
         ProtocolSelector proto = new ProtocolSelector(ProtocolSelector.Protocol.AUTOMATIC);
         proto.execute(conn);
-        System.out.println(proto.result());
 
-        for (int i = 0; i < 1000; i++) {
-            ProtocolSelector proto2 = new ProtocolSelector(ProtocolSelector.Protocol.AUTOMATIC);
-            proto2.execute(conn);
-            System.out.println(proto2.result());
-        }
+        SupportedPID0to20 temp = new SupportedPID0to20();
+        temp.execute(conn);
+        System.out.println(temp.result());
 
         conn.close();
     }
@@ -74,7 +87,7 @@ public class OBD2Connection {
     }
 
     public void write(OBD2Command<?> command) throws SerialPortException {
-        port.writeBytes((command.command()+ "\r").getBytes(StandardCharsets.US_ASCII));
+        port.writeBytes((command.command()+ "\r\n").getBytes(StandardCharsets.US_ASCII));
     }
 
     public void close() throws SerialPortException {
