@@ -35,7 +35,7 @@ public class SupportedPID21to40 extends OBD2Command<List<Class<OBD2Command<?>>>>
     public List<Class<OBD2Command<?>>> result() {
         List<Class<OBD2Command<?>>> supportedCommands = new LinkedList<>();
 
-        String [] bytesStr = rawData.split(" ");
+        String[] bytesStr = rawData.split(" ");
         String str = bytesStr[bytesStr.length - 4] + bytesStr[bytesStr.length - 3]
                 + bytesStr[bytesStr.length - 2] + bytesStr[bytesStr.length - 1];
 
@@ -48,7 +48,9 @@ public class SupportedPID21to40 extends OBD2Command<List<Class<OBD2Command<?>>>>
             Collections.reverse(mask);
 
             for (int i = 0; i < mask.size(); i++) {
-                supportedCommands.add(PID_INDEX[c][i]);
+                if (mask.get(i)) {
+                    supportedCommands.add(PID_INDEX[c][i]);
+                }
             }
         }
 

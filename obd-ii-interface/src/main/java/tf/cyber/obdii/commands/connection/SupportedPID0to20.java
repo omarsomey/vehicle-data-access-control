@@ -3,10 +3,7 @@ package tf.cyber.obdii.commands.connection;
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.commands.engine.*;
 import tf.cyber.obdii.commands.fuel.*;
-import tf.cyber.obdii.commands.vehicle.AuxillaryInputStatus;
-import tf.cyber.obdii.commands.vehicle.OBDStandardCompliance;
-import tf.cyber.obdii.commands.vehicle.RuntimeSinceEngineStart;
-import tf.cyber.obdii.commands.vehicle.VehicleSpeed;
+import tf.cyber.obdii.commands.vehicle.*;
 import tf.cyber.obdii.util.ByteUtils;
 
 import java.util.Arrays;
@@ -16,7 +13,7 @@ import java.util.List;
 
 public class SupportedPID0to20 extends OBD2Command<List<Class<OBD2Command<?>>>> {
     private static final Class<OBD2Command<?>>[][] PID_INDEX = new Class[][]{
-            {null, null, FuelSystemStatus.class, CalculatedEngineLoad.class},
+            {MonitorStatusSinceDTCCleared.class, FreezeDTC.class, FuelSystemStatus.class, CalculatedEngineLoad.class},
             {EngineCoolantTemperature.class, ShortTermFuelTrimBank1.class, LongTermFuelTrimBank1.class, ShortTermFuelTrimBank2.class},
             {LongTermFuelTrimBank2.class, FuelPressure.class, IntakeManifoldAbsolutePressure.class, EngineSpeed.class},
             {VehicleSpeed.class, TimingAdvance.class, IntakeAirTemperature.class, MassAirFlowRate.class},
@@ -48,7 +45,9 @@ public class SupportedPID0to20 extends OBD2Command<List<Class<OBD2Command<?>>>> 
             Collections.reverse(mask);
 
             for (int i = 0; i < mask.size(); i++) {
-                supportedCommands.add(PID_INDEX[c][i]);
+                if (mask.get(i)) {
+                    supportedCommands.add(PID_INDEX[c][i]);
+                }
             }
         }
 

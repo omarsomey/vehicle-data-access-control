@@ -1,22 +1,24 @@
-package tf.cyber.obdii.commands.engine;
+package tf.cyber.obdii.commands.fuel;
 
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.util.ByteUtils;
 
-public class RelativeThrottlePosition extends OBD2Command<Double> {
+public class EthanolFuelLevel extends OBD2Command<Double> {
     @Override
     public String command() {
-        return "01 45";
+        return "01 52";
     }
 
     @Override
     public Double result() {
         int[] bytes = ByteUtils.extractBytes(rawData);
-        return (100 / 255d) * bytes[bytes.length - 1];
+        int a = bytes[bytes.length - 1];
+
+        return (100 / 255d) * a;
     }
 
     @Override
     public String getFriendlyName() {
-        return "Relative Throttle Position";
+        return "Ethanol Fuel %";
     }
 }

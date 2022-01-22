@@ -4,7 +4,11 @@ import jssc.SerialPort;
 import jssc.SerialPortException;
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.commands.connection.*;
+import tf.cyber.obdii.commands.engine.EngineFuelRate;
 import tf.cyber.obdii.commands.protocol.ProtocolSelector;
+import tf.cyber.obdii.commands.vehicle.ControlModuleVoltage;
+import tf.cyber.obdii.commands.vehicle.DistanceTraveledSinceCodesCleared;
+import tf.cyber.obdii.commands.vehicle.MonitorStatusSinceDTCCleared;
 import tf.cyber.obdii.exceptions.TimeoutException;
 
 import java.nio.charset.StandardCharsets;
@@ -44,10 +48,18 @@ public class OBD2Connection {
         temp.execute(conn);
         System.out.println(temp.result());
 
+        SupportedPID21to40 temp1 = new SupportedPID21to40();
+        temp1.execute(conn);
+        System.out.println(temp1.result());
+
+        SupportedPID41to60 temp2 = new SupportedPID41to60();
+        temp2.execute(conn);
+        System.out.println(temp2.result());
+
         conn.close();
     }
 
-    public String read() throws SerialPortException, InterruptedException {
+    public synchronized String read() throws SerialPortException, InterruptedException {
         final StringBuilder buf = new StringBuilder();
         final long start = System.currentTimeMillis();
 
@@ -80,7 +92,7 @@ public class OBD2Connection {
         }
     }
 
-    public void write(OBD2Command<?> command) throws SerialPortException {
+    public synchronized void write(OBD2Command<?> command) throws SerialPortException {
         port.writeBytes((command.command()+ "\r\n").getBytes(StandardCharsets.US_ASCII));
     }
 

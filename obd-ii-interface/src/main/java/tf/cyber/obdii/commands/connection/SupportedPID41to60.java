@@ -2,12 +2,9 @@ package tf.cyber.obdii.commands.connection;
 
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.commands.engine.*;
-import tf.cyber.obdii.commands.fuel.FuelRailGaugePressure;
-import tf.cyber.obdii.commands.fuel.FuelRailPressure;
-import tf.cyber.obdii.commands.fuel.FuelTankLevelInput;
-import tf.cyber.obdii.commands.vehicle.DistanceTraveledSinceCodesCleared;
-import tf.cyber.obdii.commands.vehicle.DistanceTraveledWithMalfunctionIndicatorLamp;
-import tf.cyber.obdii.commands.vehicle.WarmUpsSinceCodesCleared;
+import tf.cyber.obdii.commands.environment.AmbientAirTemperature;
+import tf.cyber.obdii.commands.fuel.*;
+import tf.cyber.obdii.commands.vehicle.*;
 import tf.cyber.obdii.util.ByteUtils;
 
 import java.util.Arrays;
@@ -17,14 +14,14 @@ import java.util.List;
 
 public class SupportedPID41to60 extends OBD2Command<List<Class<OBD2Command<?>>>> {
     private static final Class<OBD2Command<?>>[][] PID_INDEX = new Class[][]{
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},
+            {MonitorStatusDriveCycle.class, ControlModuleVoltage.class, AbsoluteLoadValue.class, CommandedAirFuelEquivalenceRatio.class},
+            {RelativeThrottlePosition.class, AmbientAirTemperature.class, AbsoluteThrottlePositionB.class, AbsoluteThrottlePositionC.class},
+            {AcceleratorPedalPositionD.class, AcceleratorPedalPositionE.class, AcceleratorPedalPositionF.class, CommandedThrottleActuator.class},
+            {TimeRunWithMILOn.class, TimeSinceTroubleCodesCleared.class, MaximumValueSet1.class, MaximumValueAirFlow.class},
+            {FuelType.class, EthanolFuelLevel.class, AbsoluteEvaporationSystemVaporPressure.class, EvaporationSystemVaporPressure2.class},
+            {ShortTermSecondaryOxygenSensorTrimBank1Bank3.class, LongTermSecondaryOxygenSensorTrimBank1Bank3.class, ShortTermSecondaryOxygenSensorTrimBank2Bank4.class, LongTermSecondaryOxygenSensorTrimBank2Bank4.class},
+            {FuelRailAbsolutePressure.class, RelativeAcceleratorPedalPosition.class, HybridBatteryPackRemainingLife.class, EngineOilTemperature.class},
+            {FuelInjectionTiming.class, EngineFuelRate.class, EmissionRequirements.class, null},
     };
 
     @Override
@@ -36,7 +33,7 @@ public class SupportedPID41to60 extends OBD2Command<List<Class<OBD2Command<?>>>>
     public List<Class<OBD2Command<?>>> result() {
         List<Class<OBD2Command<?>>> supportedCommands = new LinkedList<>();
 
-        String [] bytesStr = rawData.split(" ");
+        String[] bytesStr = rawData.split(" ");
         String str = bytesStr[bytesStr.length - 4] + bytesStr[bytesStr.length - 3]
                 + bytesStr[bytesStr.length - 2] + bytesStr[bytesStr.length - 1];
 
@@ -49,7 +46,9 @@ public class SupportedPID41to60 extends OBD2Command<List<Class<OBD2Command<?>>>>
             Collections.reverse(mask);
 
             for (int i = 0; i < mask.size(); i++) {
-                supportedCommands.add(PID_INDEX[c][i]);
+                if (mask.get(i)) {
+                    supportedCommands.add(PID_INDEX[c][i]);
+                }
             }
         }
 

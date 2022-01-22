@@ -3,10 +3,10 @@ package tf.cyber.obdii.commands.engine;
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.util.ByteUtils;
 
-public class RelativeThrottlePosition extends OBD2Command<Double> {
+public class AcceleratorPedalPositionE extends OBD2Command<Double> {
     @Override
     public String command() {
-        return "01 45";
+        return "01 4A";
     }
 
     @Override
@@ -17,6 +17,6 @@ public class RelativeThrottlePosition extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Relative Throttle Position";
+        return "Accelerator pedal position E";
     }
 }

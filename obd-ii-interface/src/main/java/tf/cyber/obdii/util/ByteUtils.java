@@ -32,7 +32,7 @@ public class ByteUtils {
         return bool;
     }
 
-    public static Boolean[] byteToBoolean(byte x) {
+    public static Boolean[] byteToBoolean(int x) {
         Boolean bool[] = new Boolean[8];
 
         bool[0] = ((x & 0x01) != 0);
@@ -43,7 +43,6 @@ public class ByteUtils {
         bool[5] = ((x & 0x20) != 0);
         bool[6] = ((x & 0x40) != 0);
         bool[7] = ((x & 0x80) != 0);
-
 
         return bool;
     }
