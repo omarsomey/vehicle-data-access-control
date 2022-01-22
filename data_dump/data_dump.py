@@ -9,7 +9,7 @@ from datetime import datetime
 import time
 
 session_time = datetime.now()
-Path(f"data_dump/{session_time.strftime('%m_%d_%Y-%H_%M_%S')}").mkdir(parents=True, exist_ok=True)
+Path(f"{session_time.strftime('%m_%d_%Y-%H_%M_%S')}").mkdir(parents=True, exist_ok=True)
 
 url = "http://localhost:8080/info"
 
