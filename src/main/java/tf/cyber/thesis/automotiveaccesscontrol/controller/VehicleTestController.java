@@ -1,6 +1,8 @@
 package tf.cyber.thesis.automotiveaccesscontrol.controller;
 
 import jssc.SerialPortException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,8 @@ public class VehicleTestController {
     @Autowired
     OBD2Connection obd2Connection;
 
+    private final Logger vehicleTestLogger = LoggerFactory.getLogger("VehicleTestController");
+
     private final List<OBD2Command<?>> basicCommands = List.of(
             new VehicleSpeed(),
             new EngineSpeed(),
@@ -40,8 +44,15 @@ public class VehicleTestController {
 
         basicCommands.forEach(obd2Command -> {
             try {
-                System.out.println(obd2Command.getClass().getCanonicalName());
+                vehicleTestLogger.info("Running command: " + obd2Command.getClass().getName());
+
+                long nanoStart = System.nanoTime();
                 obd2Command.execute(obd2Connection);
+                long nanoEnd = System.nanoTime();
+
+                long diffMS = (nanoEnd - nanoStart) / 1000 / 1000;
+
+                vehicleTestLogger.info("Running command took " + diffMS + "ms!");
 
                 res.put(obd2Command.getKey(), obd2Command.result());
             } catch (SerialPortException | InterruptedException e) {

@@ -18,9 +18,12 @@ public abstract class OBD2Command<R> {
     public abstract String getKey();
 
     public void execute(OBD2Connection connection) throws SerialPortException, InterruptedException {
-        connection.write(this);
+        String res = null;
 
-        String res = connection.read();
+        synchronized (connection) {
+            connection.write(this);
+            res = connection.read();
+        }
 
         if (res.equals("?")) {
             throw new InvalidCommandException();
