@@ -26,7 +26,7 @@ public class OBD2Adapter {
     @Profile("prod")
     @Scope("singleton")
     public OBD2Connection obd2Connection() throws SerialPortException, InterruptedException {
-        OBD2Connection conn = new OBD2Connection(env.getProperty("obd.device"));
+        OBD2Connection conn = new OBD2Connection("/dev/ttyUSB0");
 
         // Set initial properties on connection.
         ResetELM reset = new ResetELM();

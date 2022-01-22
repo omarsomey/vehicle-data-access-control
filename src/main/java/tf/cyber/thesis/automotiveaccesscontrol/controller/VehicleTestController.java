@@ -28,8 +28,8 @@ public class VehicleTestController {
             new VehicleSpeed(),
             new EngineSpeed(),
             new AmbientAirTemperature(),
-            new CalculatedEngineLoad(),
-            new EngineOilTemperature(),
+            //new CalculatedEngineLoad(),
+            //new EngineOilTemperature(),
             new ThrottlePosition(),
             new RuntimeSinceEngineStart()
     );
@@ -40,6 +40,7 @@ public class VehicleTestController {
 
         basicCommands.forEach(obd2Command -> {
             try {
+                System.out.println(obd2Command.getClass().getCanonicalName());
                 obd2Command.execute(obd2Connection);
 
                 res.put(obd2Command.getKey(), obd2Command.result());
