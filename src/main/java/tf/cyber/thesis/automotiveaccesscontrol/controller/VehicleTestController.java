@@ -14,6 +14,7 @@ import tf.cyber.obdii.commands.vehicle.RuntimeSinceEngineStart;
 import tf.cyber.obdii.commands.vehicle.VehicleSpeed;
 import tf.cyber.obdii.io.OBD2Connection;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,8 @@ public class VehicleTestController {
                 e.printStackTrace();
             }
         });
+
+        res.put("time", Instant.now());
 
         return res;
     }
