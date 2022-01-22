@@ -23,6 +23,11 @@ public class OBDStandardCompliance extends OBD2Command<OBDStandardCompliance.OBD
         return "Conforming OBD standards of the vehicle";
     }
 
+    @Override
+    public String getKey() {
+        return "obd_compliance";
+    }
+
     public enum OBDStandardComplianceValue {
         OBD2_CARB(1),
         OBD_EPA(2),

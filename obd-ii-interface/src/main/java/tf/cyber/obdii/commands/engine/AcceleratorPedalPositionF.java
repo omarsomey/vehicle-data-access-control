@@ -17,6 +17,11 @@ public class AcceleratorPedalPositionF extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Accelerator pedal position F";
+        return "Accelerator pedal position F (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "accelerator_pedal_position_f";
     }
 }

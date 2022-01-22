@@ -19,4 +19,9 @@ public class WarmUpsSinceCodesCleared extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return "Warm-ups since codes cleared";
     }
+
+    @Override
+    public String getKey() {
+        return "warmups_since_codes_cleared";
+    }
 }

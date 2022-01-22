@@ -17,6 +17,11 @@ public class FuelTankLevelInput extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Fuel Tank Level Input";
+        return "Fuel Tank Level Input (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "fuel_tank_level_input";
     }
 }

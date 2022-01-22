@@ -23,4 +23,9 @@ public class CommandedAirFuelEquivalenceRatio extends OBD2Command<Double> {
     public String getFriendlyName() {
         return "Commanded Air-Fuel Equivalence Ratio (lambda,λ)";
     }
+
+    @Override
+    public String getKey() {
+        return "commanded_air_fuel_equivalence_ratio";
+    }
 }

@@ -19,4 +19,9 @@ public class DistanceTraveledWithMalfunctionIndicatorLamp extends OBD2Command<In
     public String getFriendlyName() {
         return "Distance traveled with malfunction indicator lamp on (km)";
     }
+
+    @Override
+    public String getKey() {
+        return "distance_traveled_with_indicator_lamp_on";
+    }
 }

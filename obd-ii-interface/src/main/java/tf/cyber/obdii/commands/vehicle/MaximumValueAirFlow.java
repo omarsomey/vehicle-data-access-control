@@ -27,4 +27,9 @@ public class MaximumValueAirFlow extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return "Maximum value for air flow rate from mass air flow sensor (g/s)";
     }
+
+    @Override
+    public String getKey() {
+        return "maximum_air_flow_rate";
+    }
 }

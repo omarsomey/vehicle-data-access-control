@@ -28,4 +28,9 @@ public class OxygenSensorsPresent extends OBD2Command<Boolean[][]>{
     public String getFriendlyName() {
         return "Oxygen sensors present (in 2 banks)";
     }
+
+    @Override
+    public String getKey() {
+        return "oxygen_sensors_present";
+    }
 }

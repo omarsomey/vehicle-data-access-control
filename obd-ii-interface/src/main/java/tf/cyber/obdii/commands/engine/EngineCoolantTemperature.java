@@ -17,6 +17,11 @@ public class EngineCoolantTemperature extends OBD2Command<Integer> {
 
     @Override
     public String getFriendlyName() {
-        return "Engine coolant temperature";
+        return "Engine coolant temperature (Celsius)";
+    }
+
+    @Override
+    public String getKey() {
+        return "engine_coolant_temperature";
     }
 }

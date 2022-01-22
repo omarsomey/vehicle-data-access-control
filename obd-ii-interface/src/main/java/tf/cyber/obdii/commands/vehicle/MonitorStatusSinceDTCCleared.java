@@ -92,4 +92,9 @@ public class MonitorStatusSinceDTCCleared extends OBD2Command<Map<String, String
     public String getFriendlyName() {
         return "Monitor status since DTCs cleared";
     }
+
+    @Override
+    public String getKey() {
+        return "monitor_status_since_dtc_cleared";
+    }
 }

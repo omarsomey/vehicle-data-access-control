@@ -21,6 +21,11 @@ public class EngineSpeed extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Engine Speed";
+        return "Engine Speed (rpm)";
+    }
+
+    @Override
+    public String getKey() {
+        return "engine_speed";
     }
 }

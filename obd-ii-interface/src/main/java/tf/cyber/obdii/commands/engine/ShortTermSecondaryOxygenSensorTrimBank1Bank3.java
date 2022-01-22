@@ -27,4 +27,9 @@ public class ShortTermSecondaryOxygenSensorTrimBank1Bank3 extends OBD2Command<Pa
     public String getFriendlyName() {
         return "Short term secondary oxygen sensor trim, A: bank 1, B: bank 3 (%)";
     }
+
+    @Override
+    public String getKey() {
+        return "short_term_secondary_oxygen_sensor_trim_bank1_bank3";
+    }
 }

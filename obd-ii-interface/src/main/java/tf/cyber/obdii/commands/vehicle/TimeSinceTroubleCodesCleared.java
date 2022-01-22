@@ -23,4 +23,9 @@ public class TimeSinceTroubleCodesCleared extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return "Time since trouble codes cleared";
     }
+
+    @Override
+    public String getKey() {
+        return "time_since_clodes_cleared";
+    }
 }

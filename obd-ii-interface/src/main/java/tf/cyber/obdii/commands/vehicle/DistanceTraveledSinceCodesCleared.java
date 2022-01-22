@@ -19,4 +19,9 @@ public class DistanceTraveledSinceCodesCleared extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return "Distance traveled since codes cleared";
     }
+
+    @Override
+    public String getKey() {
+        return "distance_traveled_since_codes_cleared";
+    }
 }

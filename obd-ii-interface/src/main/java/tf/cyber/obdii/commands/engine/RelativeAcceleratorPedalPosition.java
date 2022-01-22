@@ -20,4 +20,9 @@ public class RelativeAcceleratorPedalPosition extends OBD2Command<Double> {
     public String getFriendlyName() {
         return "Relative accelerator pedal position (%)";
     }
+
+    @Override
+    public String getKey() {
+        return "relative_accelerator_pedal_position";
+    }
 }

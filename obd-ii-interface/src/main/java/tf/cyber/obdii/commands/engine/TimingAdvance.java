@@ -17,6 +17,11 @@ public class TimingAdvance extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Timing Advance (Ignition timing)";
+        return "Timing Advance (Ignition timing, degrees before TDC)";
+    }
+
+    @Override
+    public String getKey() {
+        return "ignition_timing_advance";
     }
 }

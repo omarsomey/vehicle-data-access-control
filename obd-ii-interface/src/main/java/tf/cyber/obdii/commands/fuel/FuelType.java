@@ -24,6 +24,11 @@ public class FuelType extends OBD2Command<FuelType.FuelTypeValue> {
         return "Fuel Type";
     }
 
+    @Override
+    public String getKey() {
+        return "fuel_type";
+    }
+
     public enum FuelTypeValue {
         NOT_AVAILABLE(0),
         GASOLINE(1),

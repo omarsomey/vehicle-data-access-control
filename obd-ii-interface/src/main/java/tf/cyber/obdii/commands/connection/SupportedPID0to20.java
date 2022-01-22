@@ -58,4 +58,9 @@ public class SupportedPID0to20 extends OBD2Command<List<Class<OBD2Command<?>>>> 
     public String getFriendlyName() {
         return "Fetch Supported PIDs (0 to 20)";
     }
+
+    @Override
+    public String getKey() {
+        return "pid_support_0_20";
+    }
 }

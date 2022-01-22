@@ -20,4 +20,9 @@ public class HybridBatteryPackRemainingLife extends OBD2Command<Double> {
     public String getFriendlyName() {
         return "Hybrid battery pack remaining life (%)";
     }
+
+    @Override
+    public String getKey() {
+        return "hybrid_battery_remaining_life";
+    }
 }

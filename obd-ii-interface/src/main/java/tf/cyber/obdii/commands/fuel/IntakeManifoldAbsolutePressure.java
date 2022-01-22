@@ -17,6 +17,11 @@ public class IntakeManifoldAbsolutePressure extends OBD2Command<Integer> {
 
     @Override
     public String getFriendlyName() {
-        return "Intake manifold absolute pressure ";
+        return "Intake manifold absolute pressure (kPa)";
+    }
+
+    @Override
+    public String getKey() {
+        return "intake_manifold_absolute_pressure";
     }
 }

@@ -17,6 +17,11 @@ public class CommandedExhaustGasRecirculation extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Commanded EGR";
+        return "Commanded EGR (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "commanded_exhaust_gas_recirculation";
     }
 }

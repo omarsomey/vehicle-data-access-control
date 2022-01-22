@@ -21,6 +21,11 @@ public class CatalystTemperatureBank2Sensor1 extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Catalyst Temperature: Bank 2, Sensor 1";
+        return "Catalyst Temperature: Bank 2, Sensor 1 (Celsius)";
+    }
+
+    @Override
+    public String getKey() {
+        return "catalyst_temp_bank2_sensor1";
     }
 }

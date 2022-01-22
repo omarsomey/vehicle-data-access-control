@@ -19,4 +19,9 @@ public class EngineOilTemperature extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return "Engine Oil Temperature (Celsius)";
     }
+
+    @Override
+    public String getKey() {
+        return "engine_oil_temperature";
+    }
 }

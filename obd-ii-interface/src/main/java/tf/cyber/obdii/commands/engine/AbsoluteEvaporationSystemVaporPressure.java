@@ -22,4 +22,9 @@ public class AbsoluteEvaporationSystemVaporPressure extends OBD2Command<Double> 
     public String getFriendlyName() {
         return "Absolute Evap system Vapor Pressure (kPa)";
     }
+
+    @Override
+    public String getKey() {
+        return "absolute_evaporation_system_vapor_pressure_kpa";
+    }
 }

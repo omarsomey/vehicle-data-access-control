@@ -19,4 +19,9 @@ public class CommandedThrottleActuator extends OBD2Command<Double> {
     public String getFriendlyName() {
         return "Commanded throttle actuator (%)";
     }
+
+    @Override
+    public String getKey() {
+        return "commanded_throttle_actuator";
+    }
 }

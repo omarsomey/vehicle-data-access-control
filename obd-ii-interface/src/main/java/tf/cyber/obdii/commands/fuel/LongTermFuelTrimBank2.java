@@ -17,6 +17,11 @@ public class LongTermFuelTrimBank2 extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Long Term Fuel Trim — Bank 2";
+        return "Long Term Fuel Trim — Bank 2 (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "long_term_fuel_trim_bank2";
     }
 }

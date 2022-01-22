@@ -17,4 +17,9 @@ public class DisableHeader extends OBD2Command<String> {
     public String getFriendlyName() {
         return "Disable Header";
     }
+
+    @Override
+    public String getKey() {
+        return "disable_header";
+    }
 }

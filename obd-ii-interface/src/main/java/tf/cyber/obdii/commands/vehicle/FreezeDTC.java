@@ -17,4 +17,9 @@ public class FreezeDTC extends OBD2Command<String> {
     public String getFriendlyName() {
         return "Freeze DTC";
     }
+
+    @Override
+    public String getKey() {
+        return "freeze_dtc";
+    }
 }

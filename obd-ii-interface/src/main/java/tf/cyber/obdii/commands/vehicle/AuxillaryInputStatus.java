@@ -22,6 +22,11 @@ public class AuxillaryInputStatus extends OBD2Command<AuxillaryInputStatus.Auxil
         return "Auxiliary input status";
     }
 
+    @Override
+    public String getKey() {
+        return "auxillary_input_status";
+    }
+
     public enum AuxillaryInputStatusValue {
         PTO_INACTIVE(0), // power take off (e.g. used in tractors)
         PTO_ACTIVE(1);

@@ -23,4 +23,9 @@ public class AbsoluteLoadValue extends OBD2Command<Double> {
     public String getFriendlyName() {
         return "Absolute load value (%)";
     }
+
+    @Override
+    public String getKey() {
+        return "absolute_load_value";
+    }
 }

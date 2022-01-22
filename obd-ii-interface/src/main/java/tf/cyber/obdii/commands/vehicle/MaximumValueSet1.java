@@ -27,4 +27,9 @@ public class MaximumValueSet1 extends OBD2Command<List<Integer>> {
     public String getFriendlyName() {
         return "Maximum value for Fuel–Air equivalence ratio (%), oxygen sensor voltage (V), oxygen sensor current (mA), and intake manifold absolute pressure (kPa)";
     }
+
+    @Override
+    public String getKey() {
+        return "max_fuel_air_eq_voltage_current_pressure";
+    }
 }

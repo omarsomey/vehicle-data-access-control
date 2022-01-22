@@ -22,6 +22,11 @@ public class CommandedSecondaryAirStatus extends OBD2Command<CommandedSecondaryA
         return "Commanded secondary air status";
     }
 
+    @Override
+    public String getKey() {
+        return "commanded_secondary_air_status";
+    }
+
     public enum CommandedSecondaryAirStatusType {
         UPSTREAM(1),
         DOWNSTREAM_OF_CATALYTIC_CONVERTER(2),

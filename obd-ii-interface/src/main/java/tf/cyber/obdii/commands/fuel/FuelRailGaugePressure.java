@@ -23,4 +23,9 @@ public class FuelRailGaugePressure extends OBD2Command<Double> {
     public String getFriendlyName() {
         return " Fuel Rail Gauge Pressure (kPa)";
     }
+
+    @Override
+    public String getKey() {
+        return "fuel_rail_gauge_pressure";
+    }
 }

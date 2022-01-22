@@ -12,12 +12,16 @@ public class AmbientAirTemperature extends OBD2Command<Integer> {
     @Override
     public Integer result() {
         int [] bytes = ByteUtils.extractBytes(rawData);
-
         return bytes[bytes.length - 1] - 40;
     }
 
     @Override
     public String getFriendlyName() {
         return "Ambient Air Temperature";
+    }
+
+    @Override
+    public String getKey() {
+        return "ambient_air_temperature";
     }
 }

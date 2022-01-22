@@ -22,4 +22,9 @@ public class FuelInjectionTiming extends OBD2Command<Double> {
     public String getFriendlyName() {
         return "Fuel injection timing (rad)";
     }
+
+    @Override
+    public String getKey() {
+        return "fuel_injection_timing";
+    }
 }

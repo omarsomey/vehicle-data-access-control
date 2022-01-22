@@ -29,4 +29,9 @@ public class OxygenSensor6Tertiary extends OBD2Command<Pair<Double, Double>> {
     public String getFriendlyName() {
         return "Oxygen Sensor 6 - (Air-Fuel Equivalence Ratio, Current)";
     }
+
+    @Override
+    public String getKey() {
+        return "oxygen_sensor6_afer_current";
+    }
 }

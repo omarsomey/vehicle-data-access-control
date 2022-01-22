@@ -18,4 +18,9 @@ public class ResetELM extends OBD2Command<String> {
     public String getFriendlyName() {
         return "Reset ELM327";
     }
+
+    @Override
+    public String getKey() {
+        return "reset_elm";
+    }
 }

@@ -15,6 +15,8 @@ public abstract class OBD2Command<R> {
 
     public abstract String getFriendlyName();
 
+    public abstract String getKey();
+
     public void execute(OBD2Connection connection) throws SerialPortException, InterruptedException {
         connection.write(this);
 

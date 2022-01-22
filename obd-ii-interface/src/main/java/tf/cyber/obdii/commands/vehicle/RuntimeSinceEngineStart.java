@@ -23,4 +23,9 @@ public class RuntimeSinceEngineStart extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return "Run time since engine start";
     }
+
+    @Override
+    public String getKey() {
+        return "runtime_since_engine_start";
+    }
 }

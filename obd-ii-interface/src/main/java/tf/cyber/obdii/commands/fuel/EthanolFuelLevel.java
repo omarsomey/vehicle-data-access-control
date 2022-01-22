@@ -19,6 +19,11 @@ public class EthanolFuelLevel extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Ethanol Fuel %";
+        return "Ethanol Fuel (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "ethanol_fuel";
     }
 }

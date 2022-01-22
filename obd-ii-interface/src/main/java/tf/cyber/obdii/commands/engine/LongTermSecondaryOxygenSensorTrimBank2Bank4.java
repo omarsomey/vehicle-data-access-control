@@ -27,4 +27,9 @@ public class LongTermSecondaryOxygenSensorTrimBank2Bank4 extends OBD2Command<Pai
     public String getFriendlyName() {
         return "Long term secondary oxygen sensor trim, A: bank 2, B: bank 4 (%)";
     }
+
+    @Override
+    public String getKey() {
+        return "long_term_secondary_oxygen_sensor_trim_bank2_bank4";
+    }
 }

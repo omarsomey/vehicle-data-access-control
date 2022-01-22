@@ -100,6 +100,10 @@ public class OBD2Connection {
         port.closePort();
     }
 
+    protected OBD2Connection() {
+        this.port = null;
+    }
+
     public OBD2Connection(String portIdentifier) throws SerialPortException {
         this.port = new SerialPort(portIdentifier);
         port.openPort();

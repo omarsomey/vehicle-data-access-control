@@ -19,6 +19,11 @@ public class CalculatedEngineLoad extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Calculated Engine Load";
+        return "Calculated Engine Load (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "calculated_engine_load";
     }
 }

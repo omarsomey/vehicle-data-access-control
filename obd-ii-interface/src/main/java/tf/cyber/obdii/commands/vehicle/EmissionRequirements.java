@@ -17,4 +17,9 @@ public class EmissionRequirements extends OBD2Command<String> {
     public String getFriendlyName() {
         return "Emission requirements to which the vehicle is designed ";
     }
+
+    @Override
+    public String getKey() {
+        return "emission_requirements";
+    }
 }

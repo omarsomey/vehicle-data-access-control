@@ -18,4 +18,9 @@ public class Odometer extends OBD2Command<Double> {
     public String getFriendlyName() {
         return "Odometer";
     }
+
+    @Override
+    public String getKey() {
+        return "odometer";
+    }
 }

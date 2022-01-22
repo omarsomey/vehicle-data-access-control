@@ -59,4 +59,9 @@ public class SupportedPID41to60 extends OBD2Command<List<Class<OBD2Command<?>>>>
     public String getFriendlyName() {
         return "Fetch Supported PIDs (41 to 60)";
     }
+
+    @Override
+    public String getKey() {
+        return "pid_support_41_60";
+    }
 }

@@ -22,4 +22,9 @@ public class EngineFuelRate extends OBD2Command<Double> {
     public String getFriendlyName() {
         return "Engine fuel rate (L/h)";
     }
+
+    @Override
+    public String getKey() {
+        return "engine_fuel_rate";
+    }
 }

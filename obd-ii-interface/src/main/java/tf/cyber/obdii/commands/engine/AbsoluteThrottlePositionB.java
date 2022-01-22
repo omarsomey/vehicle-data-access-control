@@ -17,6 +17,11 @@ public class AbsoluteThrottlePositionB extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Absolute throttle position B";
+        return "Absolute throttle position B (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "absolute_throttle_position_b";
     }
 }

@@ -24,4 +24,9 @@ public class EvaporationSystemVaporPressure2 extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return "Evaporation System Vapor Pressure (Pa)";
     }
+
+    @Override
+    public String getKey() {
+        return "evaporation_system_vapor_pressure2";
+    }
 }

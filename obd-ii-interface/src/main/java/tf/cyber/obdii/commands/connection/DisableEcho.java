@@ -17,4 +17,9 @@ public class DisableEcho extends OBD2Command<String> {
     public String getFriendlyName() {
         return "Disable Echo";
     }
+
+    @Override
+    public String getKey() {
+        return "disable_echo";
+    }
 }

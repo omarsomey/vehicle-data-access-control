@@ -21,6 +21,13 @@ public class MassAirFlowRate extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Mass air flow sensor (MAF) air flow rate";
+        return "Mass air flow sensor (MAF) air flow rate (grams/sec)";
     }
+
+    @Override
+    public String getKey() {
+        return "mass_air_flow_rate";
+    }
+
+
 }

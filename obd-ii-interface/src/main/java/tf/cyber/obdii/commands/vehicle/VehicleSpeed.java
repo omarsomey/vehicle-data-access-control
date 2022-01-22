@@ -19,4 +19,9 @@ public class VehicleSpeed extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return "Vehicle Speed";
     }
+
+    @Override
+    public String getKey() {
+        return "vehicle_speed";
+    }
 }

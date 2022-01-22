@@ -29,4 +29,9 @@ public class OxygenSensor4Secondary extends OBD2Command<Pair<Double, Double>> {
     public String getFriendlyName() {
         return "Oxygen Sensor 4 - (Air-Fuel Equivalence Ratio, Voltage)";
     }
+
+    @Override
+    public String getKey() {
+        return "oxygen_sensor4_afer_voltage";
+    }
 }

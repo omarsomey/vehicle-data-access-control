@@ -23,4 +23,9 @@ public class FuelRailAbsolutePressure extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return "Fuel rail absolute pressure (kPa)";
     }
+
+    @Override
+    public String getKey() {
+        return "fuel_rail_absolute_pressure";
+    }
 }

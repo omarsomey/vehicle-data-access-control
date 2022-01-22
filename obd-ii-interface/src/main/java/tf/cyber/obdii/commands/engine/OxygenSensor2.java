@@ -27,4 +27,9 @@ public class OxygenSensor2 extends OBD2Command<Pair<Double, Double>> {
     public String getFriendlyName() {
         return "Oxygen Sensor 2 - (Voltage, Short term fuel trim)";
     }
+
+    @Override
+    public String getKey() {
+        return "oxygen_sensor2_voltage_stft";
+    }
 }

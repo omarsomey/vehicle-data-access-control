@@ -19,4 +19,9 @@ public class FuelPressure extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return "Fuel Pressure (kPa)";
     }
+
+    @Override
+    public String getKey() {
+        return "fuel_pressure";
+    }
 }

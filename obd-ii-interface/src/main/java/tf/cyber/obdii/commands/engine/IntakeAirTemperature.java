@@ -17,6 +17,11 @@ public class IntakeAirTemperature extends OBD2Command<Integer> {
 
     @Override
     public String getFriendlyName() {
-        return "Intake Air Temperature";
+        return "Intake Air Temperature (Celsius)";
+    }
+
+    @Override
+    public String getKey() {
+        return "intake_air_temperature";
     }
 }

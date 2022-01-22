@@ -23,4 +23,9 @@ public class TimeRunWithMILOn extends OBD2Command<Integer> {
     public String getFriendlyName() {
         return null;
     }
+
+    @Override
+    public String getKey() {
+        return "time_run_with_mil_on";
+    }
 }

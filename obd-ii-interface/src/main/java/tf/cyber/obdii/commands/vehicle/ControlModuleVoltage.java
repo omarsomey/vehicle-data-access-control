@@ -23,4 +23,9 @@ public class ControlModuleVoltage extends OBD2Command<Double> {
     public String getFriendlyName() {
         return "Control module voltage";
     }
+
+    @Override
+    public String getKey() {
+        return "control_module_voltage";
+    }
 }

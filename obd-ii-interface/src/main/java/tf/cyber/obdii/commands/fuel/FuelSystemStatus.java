@@ -22,6 +22,11 @@ public class FuelSystemStatus extends OBD2Command<FuelSystemStatus.FuelSystemSta
         return "Fuel System Status";
     }
 
+    @Override
+    public String getKey() {
+        return "fuel_system_status";
+    }
+
     public enum FuelSystemStatusType {
         MOTOR_OFF(0),
         OPEN_LOOP_DUE_TO_INSUFFICIENT_ENGINE_TEMP(1),

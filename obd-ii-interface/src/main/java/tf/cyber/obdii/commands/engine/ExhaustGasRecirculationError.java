@@ -17,6 +17,11 @@ public class ExhaustGasRecirculationError extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "EGR Error";
+        return "EGR Error (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "exhaust_gas_recirculation_error";
     }
 }

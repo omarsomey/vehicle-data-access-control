@@ -17,6 +17,11 @@ public class AbsoluteBarometricPressure extends OBD2Command<Integer> {
 
     @Override
     public String getFriendlyName() {
-        return "Absolute Barometric Pressure";
+        return "Absolute Barometric Pressure (kPa)";
+    }
+
+    @Override
+    public String getKey() {
+        return "absolute_barometric_pressure_kpa";
     }
 }

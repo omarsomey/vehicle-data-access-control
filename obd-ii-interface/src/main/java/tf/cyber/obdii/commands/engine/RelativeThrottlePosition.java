@@ -17,6 +17,11 @@ public class RelativeThrottlePosition extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Relative Throttle Position";
+        return "Relative Throttle Position (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "relative_throttle_position";
     }
 }

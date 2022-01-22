@@ -17,6 +17,11 @@ public class ShortTermFuelTrimBank2 extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Short Term Fuel Trim — Bank 2";
+        return "Short Term Fuel Trim — Bank 2 (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "short_term_fuel_trim_bank1";
     }
 }

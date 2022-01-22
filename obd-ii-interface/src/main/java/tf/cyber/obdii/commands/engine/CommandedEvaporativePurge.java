@@ -17,6 +17,11 @@ public class CommandedEvaporativePurge extends OBD2Command<Double> {
 
     @Override
     public String getFriendlyName() {
-        return "Commanded evaporative purge";
+        return "Commanded evaporative purge (%)";
+    }
+
+    @Override
+    public String getKey() {
+        return "commanded_evaporative_purge";
     }
 }
