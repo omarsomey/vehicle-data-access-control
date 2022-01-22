@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 import tf.cyber.obdii.commands.OBD2Command;
 import tf.cyber.obdii.commands.connection.DisableEcho;
@@ -23,6 +24,7 @@ public class OBD2Adapter {
 
     @Bean
     @Profile("prod")
+    @Scope("singleton")
     public OBD2Connection obd2Connection() throws SerialPortException, InterruptedException {
         OBD2Connection conn = new OBD2Connection(env.getProperty("obd.device"));
 
@@ -41,6 +43,7 @@ public class OBD2Adapter {
 
     @Bean
     @Profile("dev")
+    @Scope("singleton")
     public OBD2Connection obd2ConnectionDev() throws SerialPortException, InterruptedException {
         return new OBD2Connection() {
 
