@@ -11,7 +11,6 @@ public class GpsMicroserviceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GpsMicroserviceApplication.class, args);
-		VK162Connection.init("/dev/ttyACM0");
 	}
 
 }
