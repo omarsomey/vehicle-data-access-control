@@ -13,10 +13,4 @@ public class GPSDataSource {
         VK162Connection.init("/dev/ttyACM0");
         return VK162Connection.getConnection();
     }
-
-    @Bean
-    @Profile("debug")
-    public VK162Connection getGpsConnectionNull() {
-        return null;
-    }
 }
