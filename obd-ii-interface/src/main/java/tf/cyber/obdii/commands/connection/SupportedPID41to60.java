@@ -46,7 +46,7 @@ public class SupportedPID41to60 extends OBD2Command<List<Class<OBD2Command<?>>>>
             Collections.reverse(mask);
 
             for (int i = 0; i < mask.size(); i++) {
-                if (mask.get(i)) {
+                if (mask.get(i) && PID_INDEX[c][i] != null) { // do not add the last possible command as not implemented
                     supportedCommands.add(PID_INDEX[c][i]);
                 }
             }

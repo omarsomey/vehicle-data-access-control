@@ -17,9 +17,4 @@ public class RootController {
         accessLog.save(new AccessLog());
         return "Hey there!";
     }
-
-    @RequestMapping("/vehicle")
-    public String vehiclePage() {
-        return "This is some vehicle data!";
-    }
 }

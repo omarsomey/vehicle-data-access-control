@@ -23,7 +23,7 @@ public class OBD2Adapter {
     private final Logger adapterLogger = LoggerFactory.getLogger("OBD2Adapter");
 
     @Bean
-    @Profile("prod")
+    @Profile("production")
     @Scope("singleton")
     public OBD2Connection obd2Connection() throws SerialPortException, InterruptedException {
         OBD2Connection conn = new OBD2Connection("/dev/ttyUSB0");
@@ -42,7 +42,7 @@ public class OBD2Adapter {
     }
 
     @Bean
-    @Profile("dev")
+    @Profile("debug")
     @Scope("singleton")
     public OBD2Connection obd2ConnectionDev() throws SerialPortException, InterruptedException {
         return new OBD2Connection() {
