@@ -8,11 +8,14 @@ import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import java.io.StringReader;
 
 @RestController
 public class PDPController {
@@ -24,10 +27,13 @@ public class PDPController {
 
     @RequestMapping(value = "/authorize",
             method = RequestMethod.POST,
-            consumes = {MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_XML_VALUE}
+            consumes = {"application/xml", "application/xacml+xml"},
+            produces = {"application/xml", "application/xacml+xml"}
     )
-    public Response evaluateXML(Request request) {
+    public Response evaluateXML(@RequestBody String requestString) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(Request.class);
+        Request request = (Request) context.createUnmarshaller().unmarshal(new StringReader(requestString));
+
         logger.info("Evaluating XACXML XML request.");
         Response res = pdpService.getXMLAdapter().evaluate(request);
         logger.info("Finished evaluating XACXML XML request.");

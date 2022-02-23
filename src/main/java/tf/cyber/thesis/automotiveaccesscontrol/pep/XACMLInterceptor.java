@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -40,13 +39,6 @@ public class XACMLInterceptor {
     private static final String XACML_SUBJECT_ID_ATTRIBUTE = "urn:oasis:names:tc:xacml:1.0:subject:subject-id";
     private static final String XACML_ACTION_ID_ATTRIBUTE = "urn:oasis:names:tc:xacml:1.0:action:action-id";
     private static final String XACML_RESOURCE_ID_ATTRIBUTE = "urn:oasis:names:tc:xacml:1.0:resource:resource-id";
-
-    private static final List<Class<?>> annotationCandiates = List.of(
-            CustomCategory.class,
-            Environment.class,
-            Resource.class,
-            Subject.class
-    );
 
     private static enum DECISION_TYPE {
         PERMIT,
