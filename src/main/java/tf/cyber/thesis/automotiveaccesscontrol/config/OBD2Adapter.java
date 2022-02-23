@@ -1,4 +1,4 @@
-package tf.cyber.thesis.automotiveaccesscontrol.serial;
+package tf.cyber.thesis.automotiveaccesscontrol.config;
 
 import jssc.SerialPortException;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class OBD2Adapter {
     @Profile("production")
     @Scope("singleton")
     public OBD2Connection obd2Connection() throws SerialPortException, InterruptedException {
-        OBD2Connection conn = new OBD2Connection("/dev/ttyUSB0");
+        OBD2Connection conn = new OBD2Connection(env.getProperty("obd.device"));
 
         // Set initial properties on connection.
         ResetELM reset = new ResetELM();

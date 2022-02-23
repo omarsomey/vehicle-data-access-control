@@ -13,14 +13,15 @@ import tf.cyber.obdii.commands.fuel.*;
 import tf.cyber.obdii.commands.vehicle.*;
 import tf.cyber.obdii.io.OBD2Connection;
 import tf.cyber.obdii.util.Pair;
+import tf.cyber.thesis.automotiveaccesscontrol.pep.annotation.XACMLAccessControl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/vehicle")
+@XACMLAccessControl
 public class VehicleDataController {
 
     @Autowired

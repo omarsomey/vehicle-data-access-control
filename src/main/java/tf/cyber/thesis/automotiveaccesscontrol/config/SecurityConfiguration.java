@@ -8,8 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import tf.cyber.thesis.automotiveaccesscontrol.accesscontrol.XACMLAccessFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +24,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .httpBasic().and()
-                .addFilterAfter(new XACMLAccessFilter(), BasicAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/vehicle/**").authenticated()
                 .anyRequest().authenticated();

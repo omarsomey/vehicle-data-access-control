@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.ow2.authzforce</groupId>
             <artifactId>authzforce-ce-core-pdp-engine</artifactId>
-            <version>17.1.2</version>
+            <version>19.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>

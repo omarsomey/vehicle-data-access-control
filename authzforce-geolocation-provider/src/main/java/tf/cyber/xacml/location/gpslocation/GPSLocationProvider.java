@@ -69,7 +69,8 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
     @Override
     public <AV extends AttributeValue> AttributeBag<AV> get(AttributeFqn attributeFqn,
                                                             Datatype<AV> datatype,
-                                                            EvaluationContext evaluationContext) throws IndeterminateEvaluationException {
+                                                            EvaluationContext evaluationContext,
+                                                            Optional<EvaluationContext> optional) throws IndeterminateEvaluationException {
         /*final AttributeBag<?> attrVals = attrMap.get(attributeFqn);
         if (attrVals == null) {
             return null;
@@ -164,7 +165,7 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
 
         @Override
         public CloseableNamedAttributeProvider getInstance(AttributeValueFactoryRegistry attributeValueFactoryRegistry,
-                                                           AttributeProvider attributeProvider) {
+                                                           NamedAttributeProvider attributeProvider) {
             {
                 // Might be required for the future if we decide to do some fancy XML
                 // configuration stuff...

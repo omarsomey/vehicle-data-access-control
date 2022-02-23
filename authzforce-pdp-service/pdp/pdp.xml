@@ -28,8 +28,8 @@
             gpsURL="http://localhost:8081/" />
 
     <policyProvider id="policyProvider" xsi:type="StaticPolicyProvider">
-        <policyLocation>policies/permit-all.xml</policyLocation>
+        <policyLocation>policies/provider-test.xml</policyLocation>
     </policyProvider>
 
-    <rootPolicyRef>permit-all</rootPolicyRef>
+    <rootPolicyRef>provider-test</rootPolicyRef>
 </pdp>

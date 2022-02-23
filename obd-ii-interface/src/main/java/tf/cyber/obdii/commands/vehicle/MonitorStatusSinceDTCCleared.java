@@ -35,7 +35,6 @@ public class MonitorStatusSinceDTCCleared extends OBD2Command<Map<String, String
 
         // Define monitor type (diesel, otto or wankel)
         int motorType = (b & 8) >> 3;
-        System.out.println("TYPE: " + motorType);
 
         Boolean[] bBytes = ByteUtils.byteToBoolean(b);
         Boolean[] cBytes = ByteUtils.byteToBoolean(c);
