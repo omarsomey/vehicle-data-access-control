@@ -17,3 +17,4 @@ de.securedimensions.geoxacml.function.BagSetFunctions$Union
 de.securedimensions.geoxacml.function.BagSetFunctions$Subset
 de.securedimensions.geoxacml.function.BagSetFunctions$SetEquals
 tf.cyber.xacml.location.gpslocation.GPSLocationProvider$Factory
+tf.cyber.xacml.pollingfrequency.PollingFrequencyProvider$Factory

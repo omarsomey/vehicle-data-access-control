@@ -1,66 +1,57 @@
 package tf.cyber.xacml.pollingfrequency;
 
-import de.securedimensions.geoxacml.datatype.GeometryValue;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.AttributeDesignatorType;
-import oasis.names.tc.xacml._3_0.core.schema.wd_17.Attributes;
-import org.json.JSONObject;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
 import org.ow2.authzforce.core.pdp.api.*;
 import org.ow2.authzforce.core.pdp.api.value.*;
+import org.ow2.authzforce.xacml.identifiers.XacmlAttributeCategory;
 import org.ow2.authzforce.xacml.identifiers.XacmlStatusCode;
 
 import javax.xml.bind.annotation.XmlRegistry;
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.*;
 
 @XmlRegistry
 public class PollingFrequencyProvider extends BaseNamedAttributeProvider {
-    private final AttributeFqn gpsLocationFqn;
-    private final AttributeDesignatorType supportedDesignatorType;
-    private final Datatype<?> gpsLocationType = GeometryValue.DATATYPE;
-
-    private final String gpsURL;
+    private final String logUrl;
 
     private final HttpClient client;
     private final HttpRequest request;
 
-    public final static String ID = "urn:tf:cyber:xacml:pollingfrequency";
+    private final NamedAttributeProvider dependencyProvider;
 
-    private PollingFrequencyProvider(String id, String gpsURL, final Map<AttributeFqn, AttributeBag<?>> attributeMap) throws IllegalArgumentException {
-        super(ID);
-        this.gpsURL = gpsURL;
+    private final static String PROVIDER_ID = "urn:tf:cyber:xacml:polling-frequency";
+
+    private PollingFrequencyProvider(String logUrl, NamedAttributeProvider dependencyProvider) throws IllegalArgumentException {
+        super(PROVIDER_ID);
+        this.logUrl = logUrl;
+        this.dependencyProvider = dependencyProvider;
 
         this.client = HttpClient.newHttpClient();
         request = HttpRequest.newBuilder()
-                .uri(URI.create(gpsURL))
+                .uri(URI.create(logUrl))
                 .build();
-
-        //attrMap = Collections.unmodifiableMap(attributeMap);
-        //this.supportedDesignatorTypes =
-        //        attrMap.entrySet().stream().map(GPSLocationProvider::createAttributeDesignator)
-        //        .collect(Collectors.toUnmodifiableSet());
-
-        this.gpsLocationFqn = AttributeFqns.newInstance("urn:oasis:names:tc:xacml:3" +
-                                                                ".0:attribute-category:environment",
-                                                        Optional.empty(),
-                                                        "urn:tf:cyber:xacml:location:gpslocation");
-
-        this.supportedDesignatorType = createAttributeDesignator(
-                this.gpsLocationFqn,
-                GeometryValue.DATATYPE
-        );
     }
 
     @Override
     public Set<AttributeDesignatorType> getProvidedAttributes() {
-        //return supportedDesignatorTypes;
-        return Set.of(this.supportedDesignatorType);
+        AttributeDesignatorType ms = createAttributeDesignator(AttributeFqns.newInstance(XacmlAttributeCategory.XACML_3_0_ENVIRONMENT.value(),
+                                                                                              Optional.empty(),
+                                                                                         "urn:tf:cyber:xacml:polling-frequency:time-since-last-access:ms"),
+                                                                    StandardDatatypes.STRING, false);
+
+        AttributeDesignatorType s = createAttributeDesignator(AttributeFqns.newInstance(XacmlAttributeCategory.XACML_3_0_ENVIRONMENT.value(),
+                                                                                         Optional.empty(),
+                                                                                         "urn:tf:cyber:xacml:polling-frequency:time-since-last-access:s"),
+                                                               StandardDatatypes.STRING, false);
+
+        AttributeDesignatorType hz = createAttributeDesignator(AttributeFqns.newInstance(XacmlAttributeCategory.XACML_3_0_ENVIRONMENT.value(),
+                                                                                        Optional.empty(),
+                                                                                        "urn:tf:cyber:xacml:polling-frequency:hz"),
+                                                              StandardDatatypes.DOUBLE, false);
+
+        return Set.of(ms, s, hz);
     }
 
     @Override
@@ -69,79 +60,58 @@ public class PollingFrequencyProvider extends BaseNamedAttributeProvider {
                                                             EvaluationContext evaluationContext,
                                                             Optional<EvaluationContext> optional) throws IndeterminateEvaluationException {
 
-        //throw new IndeterminateEvaluationException("Requested datatype (" + datatype + ") != " +
-        //                                                   "provided by " + this + " (" +
-        //                                                   attrVals.getElementDatatype() + ")",
-        //                                           XacmlStatusCode.MISSING_ATTRIBUTE.value());
-
-        if (gpsLocationType.equals(datatype)) {
-            // Fetch location information from microservice API
-            HttpResponse<String> response;
-
-            try {
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            } catch (IOException | InterruptedException e) {
-                throw new IndeterminateEvaluationException("Failed to fetch GPS information!",
-                                                           XacmlStatusCode.MISSING_ATTRIBUTE.value());
-            }
-
-            JSONObject responseJson = new JSONObject(new String(response.body()));
-
-            List<GeometryValue> lst = new LinkedList<>();
-            Point point = new GeometryFactory()
-                    .createPoint(new Coordinate(responseJson.getDouble("latitude"),
-                                                responseJson.getDouble("longitude")));
-
-            point.setSRID(4326);
-            GeometryValue sample = new GeometryValue(point);
-            lst.add(sample);
-
-            AttributeBag<AV> bag = (AttributeBag<AV>) Bags.newAttributeBag(GeometryValue.DATATYPE, lst,
-                                                                           AttributeSources.PDP);
-
-            return bag;
-        }
+        System.out.println(dependencyProvider.getProvidedAttributes());
 
         throw new IndeterminateEvaluationException("Requested datatype (" + datatype + ") != " +
-                                                          "provided by " + this + " (" +
+                                                           "provided by " + this + " (" +
                                                            datatype + ")",
-                                                  XacmlStatusCode.MISSING_ATTRIBUTE.value());
+                                                   XacmlStatusCode.MISSING_ATTRIBUTE.value());
     }
 
     @Override
-    public void close() throws IOException {
-        // used for i.e. closing connection to remote server or other socket
-        // can be empty for now
+    public void close() {
     }
 
     private static AttributeDesignatorType createAttributeDesignator(AttributeFqn attributeFqn,
-                                                                     Datatype<?> attributeType) {
+                                                                     Datatype<?> attributeType,
+                                                                     boolean mustBePresent) {
         return new AttributeDesignatorType(attributeFqn.getCategory(), attributeFqn.getId(),
                                            attributeType.getId(),
-                                           attributeFqn.getIssuer().orElse(null), false);
+                                           attributeFqn.getIssuer().orElse(null), mustBePresent);
     }
 
     public static class DependencyAwareAttributeProviderFactory implements DependencyAwareFactory {
-        private final String providerId;
-        private final String serialPath;
+        private final String logPath;
 
-        private DependencyAwareAttributeProviderFactory(final String providerId,
-                                                        final String serialPath) {
-            this.providerId = providerId;
-            this.serialPath = serialPath;
+        private DependencyAwareAttributeProviderFactory(final String logPath) {
+            this.logPath = logPath;
         }
 
         @Override
         public Set<AttributeDesignatorType> getDependencies() {
-            // We do not have any dependencies.
-            return null;
+            AttributeDesignatorType subject = createAttributeDesignator(AttributeFqns.newInstance(XacmlAttributeCategory.XACML_1_0_ACCESS_SUBJECT.value(),
+                                                                Optional.empty(),
+                                                                XacmlAttributeCategory.XACML_1_0_ACCESS_SUBJECT.value()),
+                                                                StandardDatatypes.STRING, true);
+
+            AttributeDesignatorType action = createAttributeDesignator(AttributeFqns.newInstance(XacmlAttributeCategory.XACML_3_0_ACTION.value(),
+                                                                                                  Optional.empty(),
+                                                                                                  XacmlAttributeCategory.XACML_3_0_ACTION.value()),
+                                                                        StandardDatatypes.STRING, true);
+
+            AttributeDesignatorType resource = createAttributeDesignator(AttributeFqns.newInstance(XacmlAttributeCategory.XACML_3_0_RESOURCE.value(),
+                                                                                                 Optional.empty(),
+                                                                                                 XacmlAttributeCategory.XACML_3_0_RESOURCE.value()),
+                                                                       StandardDatatypes.STRING, true);
+
+            return Set.of(subject, action, resource);
         }
 
         @Override
         public CloseableNamedAttributeProvider getInstance(AttributeValueFactoryRegistry attributeValueFactoryRegistry,
                                                            NamedAttributeProvider attributeProvider) {
             {
-                return new PollingFrequencyProvider(this.providerId, this.serialPath,null);
+                return new PollingFrequencyProvider(this.logPath, attributeProvider);
             }
         }
     }
@@ -154,7 +124,7 @@ public class PollingFrequencyProvider extends BaseNamedAttributeProvider {
 
         @Override
         public CloseableNamedAttributeProvider.DependencyAwareFactory getInstance(PollingFrequencyProviderDescriptor conf, EnvironmentProperties environmentProperties) throws IllegalArgumentException {
-            return new DependencyAwareAttributeProviderFactory(conf.getId(), conf.getLogUrl());
+            return new DependencyAwareAttributeProviderFactory(conf.getLogUrl());
         }
     }
 }

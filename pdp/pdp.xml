@@ -27,6 +27,13 @@
             xmlns:xacml="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
             gpsURL="http://localhost:8081/" />
 
+    <attributeProvider
+            id="pollingfrequency"
+            xmlns:pf="http://cyber.tf/xacml/pollingfrequency"
+            xsi:type="pf:PollingFrequencyProviderDescriptor"
+            xmlns:xacml="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+            logUrl="http://localhost:9999/" />
+
     <policyProvider id="policyProvider" xsi:type="StaticPolicyProvider">
         <policyLocation>policies/permit-all.xml</policyLocation>
     </policyProvider>
