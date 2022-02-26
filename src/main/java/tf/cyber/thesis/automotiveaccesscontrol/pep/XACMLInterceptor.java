@@ -25,18 +25,11 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static tf.cyber.thesis.automotiveaccesscontrol.pep.util.XACMLConstants.*;
+
 @Aspect
 public class XACMLInterceptor {
     private final Logger logger = LoggerFactory.getLogger(XACMLInterceptor.class);
-
-    private static final String XACML_SUBJECT_CATEGORY = "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject";
-    private static final String XACML_ACTION_CATEGORY = "urn:oasis:names:tc:xacml:3.0:attribute-category:action";
-    private static final String XACML_RESOURCE_CATEGORY = "urn:oasis:names:tc:xacml:3.0:attribute-category:resource";
-    private static final String XACML_ENVIRONMENT_CATEGORY = "urn:oasis:names:tc:xacml:3.0:attribute-category:environment";
-
-    private static final String XACML_SUBJECT_ID_ATTRIBUTE = "urn:oasis:names:tc:xacml:1.0:subject:subject-id";
-    private static final String XACML_ACTION_ID_ATTRIBUTE = "urn:oasis:names:tc:xacml:1.0:action:action-id";
-    private static final String XACML_RESOURCE_ID_ATTRIBUTE = "urn:oasis:names:tc:xacml:1.0:resource:resource-id";
 
     private enum DECISION_TYPE {
         PERMIT,
@@ -51,8 +44,13 @@ public class XACMLInterceptor {
     @Autowired
     org.springframework.core.env.Environment env;
 
-    @Around("@annotation(tf.cyber.thesis.automotiveaccesscontrol.pep.annotation.XACMLAccessControl)" +
-            " || @within(tf.cyber.thesis.automotiveaccesscontrol.pep.annotation.XACMLAccessControl)")
+    @Autowired
+    ObligationService obligationService;
+
+    @Around("@annotation(tf.cyber.thesis.automotiveaccesscontrol.pep.annotation" +
+            ".XACMLAccessControl)" +
+            " || @within(tf.cyber.thesis.automotiveaccesscontrol.pep.annotation" +
+            ".XACMLAccessControl)")
     public Object interceptXACML(ProceedingJoinPoint joinPoint) throws Throwable {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -64,7 +62,8 @@ public class XACMLInterceptor {
         if (authentication == null) {
             // We assume that entities are authenticated, with their subject id available.
             logger.info("User tried to access XACML-protected route without authentication!");
-            //throw new AccessDeniedException("Tried to access XACML-protected route without authentication!");
+            //throw new AccessDeniedException("Tried to access XACML-protected route without
+            // authentication!");
         }
 
         // Assemble XACML request attributes.
@@ -76,7 +75,8 @@ public class XACMLInterceptor {
 
         // Add subject id, if available.
         XACMLAttribute<?> subjectID = new XACMLAttribute<>(XACML_SUBJECT_ID_ATTRIBUTE,
-                                                      authentication.getName());
+                                                           XACML_SUBJECT_CATEGORY,
+                                                           authentication.getName());
         if (authentication.getName() != null) {
             categories.get(XACML_SUBJECT_CATEGORY).add(subjectID);
         }
@@ -84,14 +84,16 @@ public class XACMLInterceptor {
         // Add resource id, if available.
         if (request.getRequestURI() != null) {
             XACMLAttribute<?> resourceID = new XACMLAttribute<>(XACML_RESOURCE_ID_ATTRIBUTE,
-                                                           request.getRequestURI());
+                                                                XACML_RESOURCE_CATEGORY,
+                                                                request.getRequestURI());
             categories.get(XACML_RESOURCE_CATEGORY).add(resourceID);
         }
 
         // Add action id, if available.
         if (request.getMethod() != null) {
             XACMLAttribute<?> actionID = new XACMLAttribute<>(XACML_ACTION_ID_ATTRIBUTE,
-                                                         request.getMethod());
+                                                              XACML_ACTION_CATEGORY,
+                                                              request.getMethod());
             categories.get(XACML_ACTION_CATEGORY).add(actionID);
         }
 
@@ -105,29 +107,38 @@ public class XACMLInterceptor {
             Arrays.stream(parameterAnnotations).forEach(annotation -> {
                 if (annotation instanceof Subject) {
                     Subject subject = (Subject) annotation;
-                    XACMLAttribute<?> subjectAttr = new XACMLAttribute<>(subject.value(), args[i.get()]);
+                    XACMLAttribute<?> subjectAttr = new XACMLAttribute<>(subject.value(),
+                                                                         XACML_SUBJECT_CATEGORY,
+                                                                         args[i.get()]);
 
                     categories.get(XACML_SUBJECT_CATEGORY).add(subjectAttr);
                 } else if (annotation instanceof Action) {
                     Action action = (Action) annotation;
-                    XACMLAttribute<?> actionAttr = new XACMLAttribute<>(action.value(), args[i.get()]);
+                    XACMLAttribute<?> actionAttr = new XACMLAttribute<>(action.value(),
+                                                                        XACML_ACTION_CATEGORY,
+                                                                        args[i.get()]);
 
                     categories.get(XACML_ACTION_CATEGORY).add(actionAttr);
                 } else if (annotation instanceof Resource) {
                     Resource resource = (Resource) annotation;
-                    XACMLAttribute<?> actionAttr = new XACMLAttribute<>(resource.value(), args[i.get()]);
+                    XACMLAttribute<?> actionAttr = new XACMLAttribute<>(resource.value(),
+                                                                        XACML_RESOURCE_CATEGORY,
+                                                                        args[i.get()]);
 
                     categories.get(XACML_RESOURCE_CATEGORY).add(actionAttr);
                 } else if (annotation instanceof Environment) {
                     Environment environment = (Environment) annotation;
-                    XACMLAttribute<?> environmentAttr = new XACMLAttribute<>(environment.value(), args[i.get()]);
+                    XACMLAttribute<?> environmentAttr = new XACMLAttribute<>(environment.value(),
+                                                                             XACML_ENVIRONMENT_CATEGORY,
+                                                                             args[i.get()]);
 
                     categories.putIfAbsent(XACML_ENVIRONMENT_CATEGORY, new LinkedList<>());
                     categories.get(XACML_ENVIRONMENT_CATEGORY).add(environmentAttr);
-                }
-                else if (annotation instanceof CustomCategory) {
+                } else if (annotation instanceof CustomCategory) {
                     CustomCategory other = (CustomCategory) annotation;
-                    XACMLAttribute<?> otherAttr = new XACMLAttribute<>(other.value(), args[i.get()]);
+                    XACMLAttribute<?> otherAttr = new XACMLAttribute<>(other.value(),
+                                                                       other.category(),
+                                                                       args[i.get()]);
 
                     categories.putIfAbsent(other.category(), new LinkedList<>());
                     categories.get(other.category()).add(otherAttr);
@@ -188,13 +199,13 @@ public class XACMLInterceptor {
                                          MediaType.get("application/json; charset=utf-8")))
                 .build();
 
-        try(Response response = httpClient.newCall(xacmlHTTPRequest).execute()) {
+        try (Response response = httpClient.newCall(xacmlHTTPRequest).execute()) {
             JSONObject res = new JSONObject(response.body().string());
             JSONArray resArr = (JSONArray) res.get("Response");
 
             JSONObject evaluation = (JSONObject) resArr.get(0);
 
-            switch(evaluation.get("Decision").toString()) {
+            switch (evaluation.get("Decision").toString()) {
                 case "Permit":
                     decision = DECISION_TYPE.PERMIT;
                     break;
@@ -208,7 +219,8 @@ public class XACMLInterceptor {
                     decision = DECISION_TYPE.NOT_APPLICABLE;
                     break;
                 default:
-                    throw new XACMLEvaluationException("Failed to determine decision type from PDP response.");
+                    throw new XACMLEvaluationException("Failed to determine decision type from " +
+                                                               "PDP response.");
             }
 
             // Process Obligations.
@@ -228,7 +240,7 @@ public class XACMLInterceptor {
             JSONArray attributesJSON = ((JSONObject) obligation).has("AttributeAssignment") ?
                     (JSONArray) ((JSONObject) obligation).get("AttributeAssignment") : null;
 
-            Obligation obl = ObligationService.get(((JSONObject) obligation).getString("Id"));
+            Obligation obl = obligationService.get(((JSONObject) obligation).getString("Id"));
 
             List<XACMLAttribute<?>> attributes = new LinkedList<>();
 
@@ -240,6 +252,7 @@ public class XACMLInterceptor {
                     attributes.add(XACMLAttribute.of(
                             attrObj.getString("AttributeId"),
                             attrObj.getString("DataType"),
+                            null, // Obligations do not specify any data types.
                             attrObj.getString("Value")
                     ));
                 });

@@ -1,13 +1,18 @@
 package tf.cyber.thesis.automotiveaccesscontrol.pep.obligation;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import java.util.Map;
 
+@Service
 public class ObligationService {
-    private final static Map<String, Obligation> obligations = Map.of(
-            "LogObligation", new LogObligation()
-    );
+    @Autowired
+    @Qualifier("obligations")
+    private Map<String, Obligation> obligations;
 
-    public static Obligation get(String id) {
+    public Obligation get(String id) {
         if (!obligations.containsKey(id)) {
             throw new ObligationNotImplementedException();
         }
