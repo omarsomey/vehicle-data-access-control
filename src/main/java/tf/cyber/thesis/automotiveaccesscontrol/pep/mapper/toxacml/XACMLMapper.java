@@ -1,6 +1,6 @@
-package tf.cyber.thesis.automotiveaccesscontrol.pep.data;
+package tf.cyber.thesis.automotiveaccesscontrol.pep.mapper.toxacml;
 
-import tf.cyber.thesis.automotiveaccesscontrol.pep.mapper.*;
+import tf.cyber.thesis.automotiveaccesscontrol.pep.data.UnsupportedDataTypeException;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Map;
 
-public class DataMapper {
-    public final static Map<Class<?>, XACMLValueMapper> dataMapper = Map.of(
+public class XACMLMapper {
+    public final static Map<Class<?>, JavaToXACMLMapper> dataMapper = Map.of(
             String.class, new StringValueMapper(),
             Boolean.class, new BooleanValueMapper(),
             Integer.class, new IntegerValueMapper(),
@@ -20,7 +20,7 @@ public class DataMapper {
             URI.class, new URIValueMapper()
     );
 
-    private DataMapper() {
+    private XACMLMapper() {
         // do not instantiate.
     }
 

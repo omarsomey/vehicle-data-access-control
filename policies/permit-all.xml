@@ -9,34 +9,26 @@
             PolicyId="SimpleDenyPolicy"
             RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-overrides">
 
-        <Target>
-            <AnyOf>
-                <AllOf>
-                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
-                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/vehicle</AttributeValue>
-                        <AttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
-                                             Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
-                                             DataType="http://www.w3.org/2001/XMLSchema#string"
-                                             MustBePresent="true"/>
-                    </Match>
-                </AllOf>
-            </AnyOf>
-            <AnyOf>
-                <AllOf>
-                    <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
-                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">simon</AttributeValue>
-                        <AttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id"
-                                             Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
-                                             DataType="http://www.w3.org/2001/XMLSchema#string"
-                                             MustBePresent="true"/>
-                    </Match>
-                </AllOf>
-            </AnyOf>
-        </Target>
+        <Target/>
 
         <Rule
-                Effect="Deny"
+                Effect="Permit"
                 RuleId="DenyTest">
         </Rule>
+
+        <ObligationExpressions>
+            <ObligationExpression ObligationId="LogObligation" FulfillOn="Permit">
+                <AttributeAssignmentExpression AttributeId="LogObligation:Subject">
+                    <AttributeDesignator MustBePresent="true" Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject" AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                </AttributeAssignmentExpression>
+                <AttributeAssignmentExpression AttributeId="LogObligation:Action">
+                    <AttributeDesignator MustBePresent="true" Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action" AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                </AttributeAssignmentExpression>
+                <AttributeAssignmentExpression AttributeId="LogObligation:Resource">
+                    <AttributeDesignator MustBePresent="true" Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource" AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                </AttributeAssignmentExpression>
+            </ObligationExpression>
+        </ObligationExpressions>
+
     </Policy>
 </PolicySet>

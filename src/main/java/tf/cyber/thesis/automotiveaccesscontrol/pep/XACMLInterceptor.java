@@ -16,15 +16,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import tf.cyber.thesis.automotiveaccesscontrol.pep.annotation.attributes.*;
-import tf.cyber.thesis.automotiveaccesscontrol.pep.data.DataMapper;
-import tf.cyber.thesis.automotiveaccesscontrol.pep.data.DataTypes;
-import tf.cyber.thesis.automotiveaccesscontrol.pep.util.Pair;
+import tf.cyber.thesis.automotiveaccesscontrol.pep.data.XACMLAttribute;
+import tf.cyber.thesis.automotiveaccesscontrol.pep.obligation.Obligation;
+import tf.cyber.thesis.automotiveaccesscontrol.pep.obligation.ObligationService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Aspect
@@ -40,7 +38,7 @@ public class XACMLInterceptor {
     private static final String XACML_ACTION_ID_ATTRIBUTE = "urn:oasis:names:tc:xacml:1.0:action:action-id";
     private static final String XACML_RESOURCE_ID_ATTRIBUTE = "urn:oasis:names:tc:xacml:1.0:resource:resource-id";
 
-    private static enum DECISION_TYPE {
+    private enum DECISION_TYPE {
         PERMIT,
         DENY,
         INDETERMINATE,
@@ -70,28 +68,31 @@ public class XACMLInterceptor {
         }
 
         // Assemble XACML request attributes.
-        Map<String, Map<String, Pair<String, String>>> categories = new HashMap<>();
+        Map<String, List<XACMLAttribute<?>>> categories = new HashMap<>();
 
-        categories.put(XACML_SUBJECT_CATEGORY, new HashMap<>());
-        categories.put(XACML_ACTION_CATEGORY, new HashMap<>());
-        categories.put(XACML_RESOURCE_CATEGORY, new HashMap<>());
+        categories.put(XACML_SUBJECT_CATEGORY, new LinkedList<>());
+        categories.put(XACML_ACTION_CATEGORY, new LinkedList<>());
+        categories.put(XACML_RESOURCE_CATEGORY, new LinkedList<>());
 
         // Add subject id, if available.
+        XACMLAttribute<?> subjectID = new XACMLAttribute<>(XACML_SUBJECT_ID_ATTRIBUTE,
+                                                      authentication.getName());
         if (authentication.getName() != null) {
-            categories.get(XACML_SUBJECT_CATEGORY)
-                    .put(XACML_SUBJECT_ID_ATTRIBUTE, Pair.of(DataTypes.map(authentication.getName()), DataMapper.map(authentication.getName())));
+            categories.get(XACML_SUBJECT_CATEGORY).add(subjectID);
         }
 
         // Add resource id, if available.
         if (request.getRequestURI() != null) {
-            categories.get(XACML_RESOURCE_CATEGORY)
-                    .put(XACML_RESOURCE_ID_ATTRIBUTE, Pair.of(DataTypes.map(request.getRequestURI()), DataMapper.map(request.getRequestURI())));
+            XACMLAttribute<?> resourceID = new XACMLAttribute<>(XACML_RESOURCE_ID_ATTRIBUTE,
+                                                           request.getRequestURI());
+            categories.get(XACML_RESOURCE_CATEGORY).add(resourceID);
         }
 
         // Add action id, if available.
         if (request.getMethod() != null) {
-            categories.get(XACML_ACTION_CATEGORY)
-                    .put(XACML_ACTION_ID_ATTRIBUTE, Pair.of(DataTypes.map(request.getMethod()), DataMapper.map(request.getMethod())));
+            XACMLAttribute<?> actionID = new XACMLAttribute<>(XACML_ACTION_ID_ATTRIBUTE,
+                                                         request.getMethod());
+            categories.get(XACML_ACTION_CATEGORY).add(actionID);
         }
 
         // Check if called function has annotated parameters that should be evaluated as part
@@ -104,31 +105,34 @@ public class XACMLInterceptor {
             Arrays.stream(parameterAnnotations).forEach(annotation -> {
                 if (annotation instanceof Subject) {
                     Subject subject = (Subject) annotation;
+                    XACMLAttribute<?> subjectAttr = new XACMLAttribute<>(subject.value(), args[i.get()]);
 
-                    categories.get(XACML_SUBJECT_CATEGORY)
-                            .put(subject.value(), Pair.of(DataTypes.map(args[i.get()]), DataMapper.map(args[i.get()])));
+                    categories.get(XACML_SUBJECT_CATEGORY).add(subjectAttr);
                 } else if (annotation instanceof Action) {
                     Action action = (Action) annotation;
-                    categories.get(XACML_ACTION_CATEGORY)
-                            .put(action.value(), Pair.of(DataTypes.map(args[i.get()]), DataMapper.map(args[i.get()])));
+                    XACMLAttribute<?> actionAttr = new XACMLAttribute<>(action.value(), args[i.get()]);
+
+                    categories.get(XACML_ACTION_CATEGORY).add(actionAttr);
                 } else if (annotation instanceof Resource) {
                     Resource resource = (Resource) annotation;
-                    categories.get(XACML_RESOURCE_CATEGORY)
-                            .put(resource.value(), Pair.of(DataTypes.map(args[i.get()]), DataMapper.map(args[i.get()])));
+                    XACMLAttribute<?> actionAttr = new XACMLAttribute<>(resource.value(), args[i.get()]);
+
+                    categories.get(XACML_RESOURCE_CATEGORY).add(actionAttr);
                 } else if (annotation instanceof Environment) {
-                    Environment resource = (Environment) annotation;
-                    categories.putIfAbsent(XACML_ENVIRONMENT_CATEGORY, new HashMap<>());
-                    categories.get(XACML_ENVIRONMENT_CATEGORY)
-                            .put(resource.value(), Pair.of(DataTypes.map(args[i.get()]), DataMapper.map(args[i.get()])));
+                    Environment environment = (Environment) annotation;
+                    XACMLAttribute<?> environmentAttr = new XACMLAttribute<>(environment.value(), args[i.get()]);
+
+                    categories.putIfAbsent(XACML_ENVIRONMENT_CATEGORY, new LinkedList<>());
+                    categories.get(XACML_ENVIRONMENT_CATEGORY).add(environmentAttr);
                 }
                 else if (annotation instanceof CustomCategory) {
-                    CustomCategory category = (CustomCategory) annotation;
-                    categories.putIfAbsent(category.category(), new HashMap<>());
-                    categories.get(category.category())
-                            .put(category.value(), Pair.of(DataTypes.map(args[i.get()]), DataMapper.map(args[i.get()])));
+                    CustomCategory other = (CustomCategory) annotation;
+                    XACMLAttribute<?> otherAttr = new XACMLAttribute<>(other.value(), args[i.get()]);
+
+                    categories.putIfAbsent(other.category(), new LinkedList<>());
+                    categories.get(other.category()).add(otherAttr);
                 }
             });
-
             i.addAndGet(1);
         });
 
@@ -143,7 +147,7 @@ public class XACMLInterceptor {
         throw new AccessDeniedException("XACML Policy evaluation resulted in DENY.");
     }
 
-    private JSONObject assembleRequestJSON(Map<String, Map<String, Pair<String, String>>> data) {
+    private JSONObject assembleRequestJSON(Map<String, List<XACMLAttribute<?>>> attributes) {
         JSONObject root = new JSONObject();
         JSONObject request = new JSONObject();
         JSONArray categoryList = new JSONArray();
@@ -152,21 +156,21 @@ public class XACMLInterceptor {
         request.put("Category", categoryList);
 
         // Walk through all specified categories.
-        data.forEach((key, value) -> {
+        attributes.forEach((category, attributeList) -> {
             JSONObject currentCategory = new JSONObject();
-            JSONArray attributes = new JSONArray();
+            JSONArray attributesJSON = new JSONArray();
 
-            currentCategory.put("CategoryId", key);
-            currentCategory.put("Attribute", attributes);
+            currentCategory.put("CategoryId", category);
+            currentCategory.put("Attribute", attributesJSON);
 
-            value.forEach((attributeId, pair) -> {
-                JSONObject attribute = new JSONObject();
+            attributeList.forEach((attr) -> {
+                JSONObject attrJson = new JSONObject();
 
-                attribute.put("AttributeId", attributeId);
-                attribute.put("DataType", pair.getFirst());
-                attribute.put("Value", pair.getSecond());
+                attrJson.put("AttributeId", attr.getId());
+                attrJson.put("DataType", attr.getDataType());
+                attrJson.put("Value", attr.getXACMLValue());
 
-                attributes.put(attribute);
+                attributesJSON.put(attrJson);
             });
 
             categoryList.put(currentCategory);
@@ -207,12 +211,42 @@ public class XACMLInterceptor {
                     throw new XACMLEvaluationException("Failed to determine decision type from PDP response.");
             }
 
-            // TODO: Consider Obligations and Advices.
+            // Process Obligations.
+            if (evaluation.has("Obligations")) {
+                processObligations((JSONArray) evaluation.get("Obligations"));
+            }
 
         } catch (IOException e) {
             throw new XACMLEvaluationException();
         }
 
         return decision;
+    }
+
+    private void processObligations(JSONArray obligations) {
+        obligations.forEach(obligation -> {
+            JSONArray attributesJSON = ((JSONObject) obligation).has("AttributeAssignment") ?
+                    (JSONArray) ((JSONObject) obligation).get("AttributeAssignment") : null;
+
+            Obligation obl = ObligationService.get(((JSONObject) obligation).getString("Id"));
+
+            List<XACMLAttribute<?>> attributes = new LinkedList<>();
+
+            // Assemble obligation attributes.
+            if (attributesJSON != null) {
+                attributesJSON.forEach(attributeObject -> {
+                    JSONObject attrObj = (JSONObject) attributeObject;
+
+                    attributes.add(XACMLAttribute.of(
+                            attrObj.getString("AttributeId"),
+                            attrObj.getString("DataType"),
+                            attrObj.getString("Value")
+                    ));
+                });
+            }
+
+            // Execute obligation.
+            obl.execute(attributes);
+        });
     }
 }

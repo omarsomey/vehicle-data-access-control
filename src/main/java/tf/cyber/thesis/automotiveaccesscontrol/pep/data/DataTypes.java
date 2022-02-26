@@ -1,5 +1,7 @@
 package tf.cyber.thesis.automotiveaccesscontrol.pep.data;
 
+import org.apache.commons.collections4.MapUtils;
+
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,13 +20,23 @@ public final class DataTypes {
             URI.class, "http://www.w3.org/2001/XMLSchema#anyURI"
     );
 
+    public final static Map<String, Class<?>> dataTypesReverse = MapUtils.invertMap(dataTypes);
+
     private DataTypes() {
         // do not instantiate.
     }
 
-    public static String map(Object o) {
-        if (dataTypes.containsKey(o.getClass())) {
-            return dataTypes.get(o.getClass());
+    public static String map(Class<?> o) {
+        if (dataTypes.containsKey(o)) {
+            return dataTypes.get(o);
+        } else {
+            throw new UnsupportedDataTypeException();
+        }
+    }
+
+    public static Class<?> map(String s) {
+        if (dataTypesReverse.containsKey(s)) {
+            return dataTypesReverse.get(s);
         } else {
             throw new UnsupportedDataTypeException();
         }
