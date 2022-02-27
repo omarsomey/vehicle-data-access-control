@@ -13,9 +13,9 @@ public class LogService {
     @Autowired
     LogRepository logRepository;
 
-    public void storeEntry(LogEntry entry) {
+    public LogEntry storeEntry(LogEntry entry) {
         entry.setTime(Calendar.getInstance().getTimeInMillis());
-        logRepository.save(entry);
+        return logRepository.save(entry);
     }
 
     public LogEntry queryLastAccess(LogEntry entry) {

@@ -3,10 +3,7 @@ package cyber.tf.accesslogservice.controller;
 import cyber.tf.accesslogservice.model.LogEntry;
 import cyber.tf.accesslogservice.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/log")
@@ -16,12 +13,20 @@ public class LogController {
     LogService logService;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public void log(@RequestBody LogEntry entry) {
-        logService.storeEntry(entry);
+    @ResponseBody
+    public LogEntry log(@RequestBody LogEntry entry) {
+        return logService.storeEntry(entry);
     }
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
+    @ResponseBody
     public LogEntry queryLastAccessSubject(@RequestBody LogEntry entry) {
-        return logService.queryLastAccess(entry);
+        LogEntry res = logService.queryLastAccess(entry);
+
+        if (res == null) {
+            res = new LogEntry(entry.getSubject(), entry.getAction(), entry.getResource(), 0);
+        }
+
+        return res;
     }
 }
