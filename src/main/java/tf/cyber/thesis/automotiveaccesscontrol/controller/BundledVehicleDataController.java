@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tf.cyber.obdii.commands.OBD2Command;
+import tf.cyber.obdii.commands.engine.CalculatedEngineLoad;
+import tf.cyber.obdii.commands.engine.EngineOilTemperature;
 import tf.cyber.obdii.commands.engine.EngineSpeed;
 import tf.cyber.obdii.commands.engine.ThrottlePosition;
 import tf.cyber.obdii.commands.environment.AmbientAirTemperature;
@@ -30,8 +32,8 @@ public class BundledVehicleDataController {
             new VehicleSpeed(),
             new EngineSpeed(),
             new AmbientAirTemperature(),
-            //new CalculatedEngineLoad(),
-            //new EngineOilTemperature(),
+            new CalculatedEngineLoad(),
+            new EngineOilTemperature(),
             new ThrottlePosition(),
             new RuntimeSinceEngineStart()
     );

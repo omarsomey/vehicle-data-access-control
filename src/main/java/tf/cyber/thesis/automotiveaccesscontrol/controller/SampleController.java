@@ -8,9 +8,7 @@ import tf.cyber.thesis.automotiveaccesscontrol.pep.annotation.attributes.Subject
 @RestController
 @XACMLAccessControl
 public class SampleController {
-    @RequestMapping(value = "/sample",
-            method = RequestMethod.GET
-    )
+    @RequestMapping(value = "/sample")
     public String samplePost(@RequestParam @Subject("someSubjectAttribute") String i, @RequestParam @Resource("someResourceAttribute") String j) {
         return String.valueOf(i + j);
     }

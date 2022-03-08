@@ -17,6 +17,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("simon")
+                .password(passwordEncoder().encode("demo")).roles("user")
+                .and()
+                .withUser("gpxtrack")
                 .password(passwordEncoder().encode("demo")).roles("user");
     }
 

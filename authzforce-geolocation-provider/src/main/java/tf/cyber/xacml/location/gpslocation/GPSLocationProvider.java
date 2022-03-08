@@ -2,7 +2,6 @@ package tf.cyber.xacml.location.gpslocation;
 
 import de.securedimensions.geoxacml.datatype.GeometryValue;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.AttributeDesignatorType;
-import oasis.names.tc.xacml._3_0.core.schema.wd_17.Attributes;
 import org.json.JSONObject;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -21,9 +20,6 @@ import java.util.*;
 
 @XmlRegistry
 public class GPSLocationProvider extends BaseNamedAttributeProvider {
-    //private final Set<AttributeDesignatorType> supportedDesignatorTypes;
-    //private final Map<AttributeFqn, AttributeBag<?>> attrMap;
-
     private final AttributeFqn gpsLocationFqn;
     private final AttributeDesignatorType supportedDesignatorType;
     private final Datatype<?> gpsLocationType = GeometryValue.DATATYPE;
@@ -35,7 +31,7 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
 
     public final static String ID = "urn:tf:cyber:xacml:location:gpslocation";
 
-    private GPSLocationProvider(String id, String gpsURL, final Map<AttributeFqn, AttributeBag<?>> attributeMap) throws IllegalArgumentException {
+    private GPSLocationProvider(String id, String gpsURL) throws IllegalArgumentException {
         super(ID);
         this.gpsURL = gpsURL;
 
@@ -43,11 +39,6 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
         request = HttpRequest.newBuilder()
                 .uri(URI.create(gpsURL))
                 .build();
-
-        //attrMap = Collections.unmodifiableMap(attributeMap);
-        //this.supportedDesignatorTypes =
-        //        attrMap.entrySet().stream().map(GPSLocationProvider::createAttributeDesignator)
-        //        .collect(Collectors.toUnmodifiableSet());
 
         this.gpsLocationFqn = AttributeFqns.newInstance("urn:oasis:names:tc:xacml:3" +
                                                                 ".0:attribute-category:environment",
@@ -62,7 +53,6 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
 
     @Override
     public Set<AttributeDesignatorType> getProvidedAttributes() {
-        //return supportedDesignatorTypes;
         return Set.of(this.supportedDesignatorType);
     }
 
@@ -71,20 +61,6 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
                                                             Datatype<AV> datatype,
                                                             EvaluationContext evaluationContext,
                                                             Optional<EvaluationContext> optional) throws IndeterminateEvaluationException {
-        /*final AttributeBag<?> attrVals = attrMap.get(attributeFqn);
-        if (attrVals == null) {
-            return null;
-        }
-
-        if (attrVals.getElementDatatype().equals(datatype)) {
-            return (AttributeBag<AV>) (attrVals);
-        }*/
-
-        //throw new IndeterminateEvaluationException("Requested datatype (" + datatype + ") != " +
-        //                                                   "provided by " + this + " (" +
-        //                                                   attrVals.getElementDatatype() + ")",
-        //                                           XacmlStatusCode.MISSING_ATTRIBUTE.value());
-
         if (gpsLocationType.equals(datatype)) {
             // Fetch location information from microservice API
             HttpResponse<String> response;
@@ -125,17 +101,6 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
         // can be empty for now
     }
 
-    /*
-    private static AttributeDesignatorType createAttributeDesignator(final Map.Entry<AttributeFqn,
-            AttributeBag<?>> attributeEntry) {
-        final AttributeFqn attrKey = attributeEntry.getKey();
-        final Bag<?> attrVals = attributeEntry.getValue();
-        return new AttributeDesignatorType(attrKey.getCategory(), attrKey.getId(),
-                                           attrVals.getElementDatatype().getId(),
-                                           attrKey.getIssuer().orElse(null), false);
-    }
-    */
-
     private static AttributeDesignatorType createAttributeDesignator(AttributeFqn attributeFqn,
                                                                      Datatype<?> attributeType) {
         return new AttributeDesignatorType(attributeFqn.getCategory(), attributeFqn.getId(),
@@ -146,14 +111,10 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
     public static class DependencyAwareAttributeProviderFactory implements DependencyAwareFactory {
         private final String providerId;
         private final String serialPath;
-        //private final List<Attributes> jaxbAttCats;
 
         private DependencyAwareAttributeProviderFactory(final String providerId,
-                                                        final String serialPath,
-                                                        final List<Attributes> jaxbAttributeCategories) {
-            assert providerId != null && jaxbAttributeCategories != null;
+                                                        final String serialPath) {
             this.providerId = providerId;
-            //this.jaxbAttCats = jaxbAttributeCategories;
             this.serialPath = serialPath;
         }
 
@@ -167,48 +128,7 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
         public CloseableNamedAttributeProvider getInstance(AttributeValueFactoryRegistry attributeValueFactoryRegistry,
                                                            NamedAttributeProvider attributeProvider) {
             {
-                // Might be required for the future if we decide to do some fancy XML
-                // configuration stuff...
-                /*final NamedXacmlAttributeParser<Attribute> namedXacmlAttParser =
-                        new XacmlJaxbParsingUtils.NamedXacmlJaxbAttributeParser
-                        (attributeValueFactoryRegistry);
-                final XacmlRequestAttributeParser<Attribute, AttributeBag<?>>
-                xacmlAttributeParser = new NonIssuedLikeIssuedStrictXacmlAttributeParser<>
-                (namedXacmlAttParser);
-                final Set<String> attrCategoryNames = new HashSet<>();
-                final Map<AttributeFqn, AttributeBag<?>> mutableAttMap = new HashMap<>();
-                for (final Attributes jaxbAttributes : this.jaxbAttCats) {
-                    final String categoryName = jaxbAttributes.getCategory();
-                    if (!attrCategoryNames.add(categoryName)) {
-                        throw new IllegalArgumentException("Unsupported repetition of " +
-                                                                   "Attributes[@Category='" +
-                                                                   categoryName + "']");
-                    }
-
-                    for (final Attribute jaxbAttr : jaxbAttributes.getAttributes()) {
-                        xacmlAttributeParser.parseNamedAttribute(categoryName, jaxbAttr, null,
-                                                                 mutableAttMap);
-                    }
-                }*/
-
-                /*
-                List<GeometryValue> lst = new LinkedList<>();
-                GeometryValue sample = new GeometryValue(new GeometryFactory().createPoint(new
-                Coordinate(-30.0d, 0.0d)));
-                lst.add(sample);
-
-                AttributeBag<?> bag = Bags.newAttributeBag(GeometryValue.DATATYPE, lst,
-                AttributeSources.PDP);
-
-                final Map<AttributeFqn, AttributeBag<?>> attributeMap = new HashMap<>();
-                AttributeFqn fqn = AttributeFqns.newInstance("urn:oasis:names:tc:xacml:3
-                .0:attribute-category:environment", Optional.empty(),
-                "urn:tf:cyber:xacml:location:gpslocation");
-                attributeMap.put(fqn, bag);
-
-
-                */
-                return new GPSLocationProvider(this.providerId, this.serialPath,null);
+                return new GPSLocationProvider(this.providerId, this.serialPath);
             }
         }
     }
@@ -221,7 +141,7 @@ public class GPSLocationProvider extends BaseNamedAttributeProvider {
 
         @Override
         public CloseableNamedAttributeProvider.DependencyAwareFactory getInstance(GPSLocationProviderDescriptor conf, EnvironmentProperties environmentProperties) throws IllegalArgumentException {
-            return new DependencyAwareAttributeProviderFactory(conf.getId(), conf.getGpsURL() ,new LinkedList<>());
+            return new DependencyAwareAttributeProviderFactory(conf.getId(), conf.getGpsURL());
         }
     }
 }

@@ -58,7 +58,6 @@ public class LogObligation extends Obligation {
                 .build();
 
         try (Response response = http.newCall(req).execute()) {
-            System.out.println(response.body().string());
             // Ignore response, data is logged already now.
         } catch (IOException e) {
             throw new ObligationFulfilmentFailedException("Failed to submit access to log server!");

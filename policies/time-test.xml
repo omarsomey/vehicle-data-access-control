@@ -10,7 +10,7 @@
     <Policy
             Version="1.0"
             PolicyId="SamplePolicy"
-            RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-overrides">
+            RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit">
 
         <Target/>
 
@@ -20,23 +20,39 @@
 
             <Condition>
                 <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
-                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:time-greater-than-or-equal">
-                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:time-one-and-only">
-                            <AttributeDesignator DataType="http://www.w3.org/2001/XMLSchema#time"
-                                                 AttributeId="urn:oasis:names:tc:xacml:1.0:environment:current-time"
-                                                 Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
-                                                 MustBePresent="true"/>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:3.0:function:dateTime-in-dayOfWeek-range">
+                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:dateTime-one-and-only">
+                            <AttributeDesignator
+                                    Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
+                                    AttributeId="urn:oasis:names:tc:xacml:1.0:environment:current-dateTime"
+                                    DataType="http://www.w3.org/2001/XMLSchema#dateTime"
+                                    MustBePresent="false"/>
                         </Apply>
-                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#time">14:00:00+01:00</AttributeValue>
+                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">2+01:00</AttributeValue>
+                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">4+01:00</AttributeValue>
                     </Apply>
-                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:time-less-than-or-equal">
-                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:time-one-and-only">
-                            <AttributeDesignator DataType="http://www.w3.org/2001/XMLSchema#time"
-                                                 AttributeId="urn:oasis:names:tc:xacml:1.0:environment:current-time"
-                                                 Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
-                                                 MustBePresent="true"/>
+
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:time-greater-than-or-equal">
+                            <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:time-one-and-only">
+                                <AttributeDesignator
+                                        DataType="http://www.w3.org/2001/XMLSchema#time"
+                                        AttributeId="urn:oasis:names:tc:xacml:1.0:environment:current-time"
+                                        Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
+                                        MustBePresent="true"/>
+                            </Apply>
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#time">14:00:00+01:00</AttributeValue>
                         </Apply>
-                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#time">20:00:00+01:00</AttributeValue>
+                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:time-less-than-or-equal">
+                            <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:time-one-and-only">
+                                <AttributeDesignator
+                                        DataType="http://www.w3.org/2001/XMLSchema#time"
+                                        AttributeId="urn:oasis:names:tc:xacml:1.0:environment:current-time"
+                                        Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
+                                        MustBePresent="true"/>
+                            </Apply>
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#time">20:00:00+01:00</AttributeValue>
+                        </Apply>
                     </Apply>
                 </Apply>
             </Condition>

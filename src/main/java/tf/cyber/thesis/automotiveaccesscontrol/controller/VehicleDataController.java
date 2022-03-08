@@ -28,7 +28,7 @@ public class VehicleDataController {
     public OBD2Connection obd2Connection;
 
     @RequestMapping("/monitor")
-    public Map<String, Map<String, String>> getMonitorStatusSinceDTCCleared() throws SerialPortException, InterruptedException {
+    public Map<String, Map<String, String>> getMonitorStatusSinceDTCCleared(String parameter) throws SerialPortException, InterruptedException {
         MonitorStatusSinceDTCCleared cmd = new MonitorStatusSinceDTCCleared();
         cmd.execute(obd2Connection);
         return Map.of(cmd.getKey(), cmd.result());

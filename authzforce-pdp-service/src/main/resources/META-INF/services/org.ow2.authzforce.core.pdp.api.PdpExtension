@@ -18,3 +18,5 @@ de.securedimensions.geoxacml.function.BagSetFunctions$Subset
 de.securedimensions.geoxacml.function.BagSetFunctions$SetEquals
 tf.cyber.xacml.location.gpslocation.GPSLocationProvider$Factory
 tf.cyber.xacml.pollingfrequency.PollingFrequencyProvider$Factory
+tf.cyber.authzforce.time.datatypes.DayOfWeekValue$Factory
+tf.cyber.authzforce.time.functions.DateTimeInDayOfWeekRange

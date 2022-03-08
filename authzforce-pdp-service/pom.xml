@@ -64,6 +64,11 @@
 			<artifactId>authzforce-polling-frequency-provider</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>tf.cyber.xacml</groupId>
+			<artifactId>authzforce-time-extension</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 
 		<dependency>
 			<groupId>de.securedimensions.geoxacml</groupId>
