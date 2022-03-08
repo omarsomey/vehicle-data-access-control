@@ -2,11 +2,12 @@ package tf.cyber.authzforce.time.datatypes.java;
 
 import java.time.DayOfWeek;
 import java.util.Objects;
+import java.util.SimpleTimeZone;
 
 public class DayOfWeekType {
     private DayOfWeek dayOfWeek = DayOfWeek.MONDAY;
-    private int hours;
-    private int minutes;
+    private Integer hours;
+    private Integer minutes;
     private boolean positiveShift;
 
     public DayOfWeekType() {
@@ -44,12 +45,22 @@ public class DayOfWeekType {
         this.positiveShift = positiveShift;
     }
 
+    public SimpleTimeZone getTimezone() {
+        if (hours != null && minutes != null) {
+            int offset = hours * 60 * 60000 + minutes * 60000;
+            offset = positiveShift ? offset : -1 * offset;
+            return new SimpleTimeZone(offset, null);
+        } else {
+            throw new IllegalArgumentException("Cannot provide timezone information if not set!");
+        }
+    }
+
     @Override
     public String toString() {
         return "DayOfWeekType{" +
                 "dayOfWeek=" + dayOfWeek +
-                ", hours=" + hours +
-                ", minutes=" + minutes +
+                ", hours=" + String.format("%02d", hours) +
+                ", minutes=" + String.format("%02d", minutes) +
                 ", positiveShift=" + positiveShift +
                 '}';
     }
