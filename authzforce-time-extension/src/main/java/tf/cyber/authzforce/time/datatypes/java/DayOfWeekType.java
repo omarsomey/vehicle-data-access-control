@@ -55,6 +55,10 @@ public class DayOfWeekType {
         }
     }
 
+    public boolean hasTimezone() {
+        return hours != null && minutes != null;
+    }
+
     @Override
     public String toString() {
         return "DayOfWeekType{" +

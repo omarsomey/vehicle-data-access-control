@@ -28,8 +28,8 @@
                                     DataType="http://www.w3.org/2001/XMLSchema#dateTime"
                                     MustBePresent="false"/>
                         </Apply>
-                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">7</AttributeValue>
-                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">2</AttributeValue>
+                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">5+01:00</AttributeValue>
+                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">3+01:00</AttributeValue>
                     </Apply>
 
                     <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">

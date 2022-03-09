@@ -30,8 +30,8 @@ public class DateTimeInDayOfWeekRange extends MultiParameterTypedFirstOrderFunct
             @Override
             protected BooleanValue evaluate(Deque<AttributeValue> args) throws IndeterminateEvaluationException {
                 XMLGregorianCalendar dateTimeValue = ((DateTimeValue) args.poll()).getUnderlyingValue();
-                DayOfWeekType dayOfWeekValueStart = ((DayOfWeekValue) args.poll()).getUnderlyingValue();
-                DayOfWeekType dayOfWeekValueEnd = ((DayOfWeekValue) args.poll()).getUnderlyingValue();
+                DayOfWeekType dayStartValue = ((DayOfWeekValue) args.poll()).getUnderlyingValue();
+                DayOfWeekType dayEndValue = ((DayOfWeekValue) args.poll()).getUnderlyingValue();
 
                 dateTimeValue = dateTimeValue.normalize();
 
@@ -45,16 +45,42 @@ public class DateTimeInDayOfWeekRange extends MultiParameterTypedFirstOrderFunct
                         dateTimeValue.getMinute(),
                         dateTimeValue.getSecond());
 
-                LocalDateTime current = LocalDateTime.of(currentDayOfWeekUTC, currentTimeUTC);
+                LocalDateTime parameterDateTime = LocalDateTime.of(currentDayOfWeekUTC, currentTimeUTC);
 
-                int startDay = dayOfWeekValueStart.getDayOfWeek().getValue();
-                int endDay = dayOfWeekValueEnd.getDayOfWeek().getValue();
+                int startDay = dayStartValue.getDayOfWeek().getValue();
+                int endDay = dayEndValue.getDayOfWeek().getValue();
 
-                boolean overlap = dayOfWeekValueStart.getDayOfWeek().getValue() > dayOfWeekValueEnd.getDayOfWeek().getValue();
+                LocalDateTime normalizedDayStart = parameterDateTime;
+                LocalDateTime normalizedDayEnd = parameterDateTime;
+
+                // Run timezones against DateTime parameter, to see of day changes occur.
+                if (dayStartValue.hasTimezone()) {
+                    if (dayStartValue.isPositiveShift()) {
+                        normalizedDayStart = parameterDateTime.plus(Duration.ofHours(dayStartValue.getHours()).plus(Duration.ofMinutes(dayStartValue.getMinutes())));
+                    } else {
+                        normalizedDayStart = parameterDateTime.minus(Duration.ofHours(dayStartValue.getHours()).plus(Duration.ofMinutes(dayStartValue.getMinutes())));
+                    }
+                }
+
+                if (dayEndValue.hasTimezone()) {
+                    if (dayEndValue.isPositiveShift()) {
+                        normalizedDayEnd = parameterDateTime.plus(Duration.ofHours(dayEndValue.getHours()).plus(Duration.ofMinutes(dayEndValue.getMinutes())));
+                    } else {
+                        normalizedDayEnd = parameterDateTime.minus(Duration.ofHours(dayEndValue.getHours()).plus(Duration.ofMinutes(dayEndValue.getMinutes())));
+                    }
+                }
+
+                int normalizedStartDay = startDay + (normalizedDayStart.getDayOfWeek().getValue() - parameterDateTime.getDayOfWeek().getValue());
+                int normalizedEndDay = endDay + (normalizedDayEnd.getDayOfWeek().getValue() - parameterDateTime.getDayOfWeek().getValue());
+
                 boolean res = false;
 
-                if (!overlap) {
-
+                if (normalizedStartDay <= normalizedEndDay) {
+                    res = normalizedStartDay <= parameterDateTime.getDayOfWeek().getValue() &&
+                            parameterDateTime.getDayOfWeek().getValue() <= normalizedEndDay;
+                } else {
+                    res = normalizedStartDay <= parameterDateTime.getDayOfWeek().getValue() ||
+                            normalizedEndDay >= parameterDateTime.getDayOfWeek().getValue();
                 }
 
                 return new BooleanValue(res);

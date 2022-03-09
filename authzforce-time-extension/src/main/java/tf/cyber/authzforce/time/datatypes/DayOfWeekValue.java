@@ -67,19 +67,23 @@ public class DayOfWeekValue extends SimpleValue<DayOfWeekType> {
 
                 if (value.matches(VALUE_REGEX)) {
                     DayOfWeek dayOfWeek = DayOfWeek.of(Integer.parseInt(value.substring(0, 1)));
-                    boolean positiveShift = value.charAt(1) == '+';
-
-                    String timezoneComplete = value.substring(2);
-                    String[] timezoneParts = timezoneComplete.split(":");
-
-                    int hours = Integer.parseInt(timezoneParts[0]);
-                    int minutes = Integer.parseInt(timezoneParts[1]);
-
                     DayOfWeekType res = new DayOfWeekType();
+
+                    if (value.length() != 1) {
+                        boolean positiveShift = value.charAt(1) == '+';
+
+                        String timezoneComplete = value.substring(2);
+                        String[] timezoneParts = timezoneComplete.split(":");
+
+                        int hours = Integer.parseInt(timezoneParts[0]);
+                        int minutes = Integer.parseInt(timezoneParts[1]);
+
+                        res.setPositiveShift(positiveShift);
+                        res.setHours(hours);
+                        res.setMinutes(minutes);
+                    }
+
                     res.setDayOfWeek(dayOfWeek);
-                    res.setPositiveShift(positiveShift);
-                    res.setHours(hours);
-                    res.setMinutes(minutes);
                     return new DayOfWeekValue(res);
                 } else {
                     throw new IllegalArgumentException("Invalid format for " + TYPE.getId());
