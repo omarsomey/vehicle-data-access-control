@@ -10,7 +10,7 @@ import tf.cyber.authzforce.time.datatypes.DayOfWeekValue;
 import tf.cyber.authzforce.time.datatypes.java.DayOfWeekType;
 
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.Deque;
 import java.util.List;
 
@@ -40,9 +40,24 @@ public class DateTimeInDayOfWeekRange extends MultiParameterTypedFirstOrderFunct
                         dateTimeValue.getMonth(),
                         dateTimeValue.getDay());
 
-                boolean overlap = dayOfWeekValueStart.getDayOfWeek().getValue() > dayOfWeekValueEnd.getDayOfWeek().getValue();
+                LocalTime currentTimeUTC = LocalTime.of(
+                        dateTimeValue.getHour(),
+                        dateTimeValue.getMinute(),
+                        dateTimeValue.getSecond());
 
-                return new BooleanValue(true);
+                LocalDateTime current = LocalDateTime.of(currentDayOfWeekUTC, currentTimeUTC);
+
+                int startDay = dayOfWeekValueStart.getDayOfWeek().getValue();
+                int endDay = dayOfWeekValueEnd.getDayOfWeek().getValue();
+
+                boolean overlap = dayOfWeekValueStart.getDayOfWeek().getValue() > dayOfWeekValueEnd.getDayOfWeek().getValue();
+                boolean res = false;
+
+                if (!overlap) {
+
+                }
+
+                return new BooleanValue(res);
             }
         };
     }

@@ -28,8 +28,8 @@
                                     DataType="http://www.w3.org/2001/XMLSchema#dateTime"
                                     MustBePresent="false"/>
                         </Apply>
-                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">2+01:00</AttributeValue>
-                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">4+01:00</AttributeValue>
+                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">7</AttributeValue>
+                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">2</AttributeValue>
                     </Apply>
 
                     <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
@@ -41,7 +41,7 @@
                                         Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
                                         MustBePresent="true"/>
                             </Apply>
-                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#time">14:00:00+01:00</AttributeValue>
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#time">10:00:00+01:00</AttributeValue>
                         </Apply>
                         <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:time-less-than-or-equal">
                             <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:time-one-and-only">
