@@ -8,7 +8,7 @@
     <AnyOf>
       <AllOf>
         <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
-          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">simon</AttributeValue>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">gpxtrack</AttributeValue>
           <AttributeDesignator
                   Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
                   AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id"
@@ -17,7 +17,7 @@
         </Match>
 
         <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
-          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/vehicle/engineSpeed</AttributeValue>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/vehicle/location</AttributeValue>
           <AttributeDesignator DataType="http://www.w3.org/2001/XMLSchema#string"
                                AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
                                Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"

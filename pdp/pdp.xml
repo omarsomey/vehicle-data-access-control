@@ -37,8 +37,8 @@
             logUrl="http://localhost:9999/log/query" />
 
     <policyProvider id="policyProvider" xsi:type="StaticPolicyProvider">
-        <policyLocation>policies/time-test.xml</policyLocation>
+        <policyLocation>policies/example-sa-alternate.xml</policyLocation>
     </policyProvider>
 
-    <rootPolicyRef>time-test</rootPolicyRef>
+    <rootPolicyRef>GPXTrackPolicyAlternate</rootPolicyRef>
 </pdp>
