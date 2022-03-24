@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Policy
+        xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
+        Version="1.0"
+        PolicyId="SmartSuranceRM"
+        RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit">
+  <Target>
+    <AnyOf>
+      <AllOf>
+        <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">smartsurance</AttributeValue>
+          <AttributeDesignator
+                  Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+                  AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id"
+                  MustBePresent="true"
+                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
+        </Match>
+      </AllOf>
+    </AnyOf>
+  </Target>
+
+  <Rule
+          Effect="Permit"
+          RuleId="RestrictCPUTime">
+
+    <Target>
+      <AnyOf>
+        <AllOf>
+          <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/cpu/time</AttributeValue>
+            <AttributeDesignator
+                    Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                    AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+                    MustBePresent="true"
+                    DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </Match>
+        </AllOf>
+      </AnyOf>
+    </Target>
+
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-less-than-or-equal">
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-one-and-only">
+          <AttributeDesignator
+                  Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                  AttributeId="urn:tf:cyber:resourcecontrol:cpu:time"
+                  DataType="http://www.w3.org/2001/XMLSchema#integer"
+                  MustBePresent="false"/>
+        </Apply>
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">10000</AttributeValue>
+      </Apply>
+    </Condition>
+  </Rule>
+
+  <Rule
+          Effect="Permit"
+          RuleId="RestrictCPUTimeWithFraction">
+
+    <Target>
+      <AnyOf>
+        <AllOf>
+          <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/cpu/time_with_fraction</AttributeValue>
+            <AttributeDesignator
+                    Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                    AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+                    MustBePresent="true"
+                    DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </Match>
+        </AllOf>
+      </AnyOf>
+    </Target>
+
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-less-than-or-equal">
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-one-and-only">
+            <AttributeDesignator
+                    Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                    AttributeId="urn:tf:cyber:resourcecontrol:cpu:time"
+                    DataType="http://www.w3.org/2001/XMLSchema#integer"
+                    MustBePresent="false"/>
+          </Apply>
+          <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">10000</AttributeValue>
+        </Apply>
+
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-greater-than-or-equal">
+            <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-one-and-only">
+              <AttributeDesignator
+                      Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                      AttributeId="urn:tf:cyber:resourcecontrol:cpu:fraction"
+                      DataType="http://www.w3.org/2001/XMLSchema#integer"
+                      MustBePresent="false"/>
+            </Apply>
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">100000</AttributeValue>
+          </Apply>
+
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-less-than-or-equal">
+            <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-one-and-only">
+              <AttributeDesignator
+                      Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                      AttributeId="urn:tf:cyber:resourcecontrol:cpu:fraction"
+                      DataType="http://www.w3.org/2001/XMLSchema#integer"
+                      MustBePresent="false"/>
+            </Apply>
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">150000</AttributeValue>
+          </Apply>
+        </Apply>
+      </Apply>
+    </Condition>
+  </Rule>
+
+  <Rule
+          Effect="Permit"
+          RuleId="AllowPositiveNiceness">
+
+    <Target>
+      <AnyOf>
+        <AllOf>
+          <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/cpu/nice</AttributeValue>
+            <AttributeDesignator
+                    Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                    AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+                    MustBePresent="true"
+                    DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </Match>
+        </AllOf>
+      </AnyOf>
+    </Target>
+
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-greater-than-or-equal">
+        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-one-and-only">
+          <AttributeDesignator
+                  Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                  AttributeId="urn:tf:cyber:resourcecontrol:cpu:nice"
+                  DataType="http://www.w3.org/2001/XMLSchema#integer"
+                  MustBePresent="false"/>
+        </Apply>
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">0</AttributeValue>
+      </Apply>
+    </Condition>
+  </Rule>
+</Policy>

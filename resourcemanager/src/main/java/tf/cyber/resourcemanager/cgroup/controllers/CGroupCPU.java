@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 
 public class CGroupCPU {
     public static final String CPU_IDLE = "cpu.idle";
@@ -15,12 +16,28 @@ public class CGroupCPU {
     public static final String CPU_UCLAMP_MAX = "cpu.uclamp.max";
     public static final String CPU_UCLAMP_MIN = "cpu.uclamp.min";
     public static final String CPU_WEIGHT = "cpu.weight";
-    public static final String CPU_WEIGHT_NICE = "cpu.nice";
+    public static final String CPU_WEIGHT_NICE = "cpu.weight.nice";
 
-    private Path cgroupPath;
+    private final Path cgroupPath;
 
-    public CGroupCPU(Path cgroupPath) {
-        cgroupPath = cgroupPath;
+    public CGroupCPU(Path cgroupPath) throws IOException {
+        this.cgroupPath = cgroupPath;
+
+        if (!Files.exists(Path.of(cgroupPath.toString(), "cgroup.controllers"))) {
+            throw new IllegalArgumentException("cgroup.controllers file not found. Check your" +
+                                                       "cgroup configuration.");
+        }
+
+        String availableControllers = Files.readString(Path.of(cgroupPath.toString(), "cgroup.controllers"));
+
+        long controllerAvailable = Arrays.stream(availableControllers.split(" "))
+                .filter(controller -> controller.equals("cpu"))
+                .count();
+
+        if (controllerAvailable != 1) {
+            throw new IllegalArgumentException("cpu controller not found in cgroup.controllers file." +
+                                                       "Check your cgroup configuration.");
+        }
     }
 
     public String getCpuIdle() throws IOException {
@@ -74,8 +91,19 @@ public class CGroupCPU {
             throw new IllegalArgumentException("Time and fraction must not be negative.");
         }
 
+        if (fraction < time) {
+            throw new IllegalArgumentException("Fraction must not be smaller than time.");
+        }
+
         Files.writeString(Paths.get(cgroupPath.toString(), CPU_MAX),
-                          Integer.toString(time) + " " + Integer.toString(fraction),
+                          time + " " + fraction,
+                          StandardOpenOption.WRITE);
+    }
+
+    public void setCPUMaxUnlimited() throws IOException {
+        System.out.println(Paths.get(cgroupPath.toString(), CPU_MAX));
+        Files.writeString(Paths.get(cgroupPath.toString(), CPU_MAX),
+                          "max 100000",
                           StandardOpenOption.WRITE);
     }
 }

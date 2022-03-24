@@ -16,11 +16,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("simon")
-                .password(passwordEncoder().encode("demo")).roles("user")
+                .withUser("smartsurance")
+                .password(passwordEncoder().encode("smartsurance")).roles("user")
                 .and()
-                .withUser("gpxtrack")
-                .password(passwordEncoder().encode("demo")).roles("user");
+                .withUser("trafficaggregator")
+                .password(passwordEncoder().encode("trafficaggregator")).roles("user");
     }
 
     @Override
@@ -28,7 +28,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .httpBasic().and()
                 .authorizeRequests()
-                .antMatchers("/vehicle/**").authenticated()
                 .anyRequest().authenticated();
     }
 
