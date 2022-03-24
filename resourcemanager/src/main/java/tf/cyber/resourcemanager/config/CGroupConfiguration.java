@@ -18,6 +18,6 @@ public class CGroupConfiguration {
     @Bean
     @Scope("singleton")
     public CGroupFileSystem getCGroupFileSystem() {
-        return new CGroupFileSystemImpl(Paths.get(env.getProperty("cgroup.fs.homedir")));
+        return null;
     }
 }
