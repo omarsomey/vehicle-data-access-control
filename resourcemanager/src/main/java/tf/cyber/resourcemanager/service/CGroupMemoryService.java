@@ -41,7 +41,7 @@ public class CGroupMemoryService {
         return cgfs.getMemoryManager().getMemorySwapMax();
     }
 
-    public void setMemoryHigh(int memoryHigh) throws IOException {
+    public void setMemoryHigh(long memoryHigh) throws IOException {
         CGroupFileSystem cgfs = cGroupService.getCGroupFileSystem();
         cgfs.getMemoryManager().setMemoryHigh(memoryHigh);
     }
@@ -51,7 +51,7 @@ public class CGroupMemoryService {
         cgfs.getMemoryManager().setMemoryHighUnlimited();
     }
 
-    public void setMemoryMax(int memoryMax) throws IOException {
+    public void setMemoryMax(long memoryMax) throws IOException {
         CGroupFileSystem cgfs = cGroupService.getCGroupFileSystem();
         cgfs.getMemoryManager().setMemoryMax(memoryMax);
     }
@@ -61,7 +61,7 @@ public class CGroupMemoryService {
         cgfs.getMemoryManager().setMemoryMaxUnlimited();
     }
 
-    public void setMemorySwapHigh(int memorySwapHigh) throws IOException {
+    public void setMemorySwapHigh(long memorySwapHigh) throws IOException {
         CGroupFileSystem cgfs = cGroupService.getCGroupFileSystem();
         cgfs.getMemoryManager().setMemorySwapHigh(memorySwapHigh);
     }
@@ -71,7 +71,7 @@ public class CGroupMemoryService {
         cgfs.getMemoryManager().setMemorySwapHighUnlimited();
     }
 
-    public void setMemorySwapMax(int memorySwapMax) throws IOException {
+    public void setMemorySwapMax(long memorySwapMax) throws IOException {
         CGroupFileSystem cgfs = cGroupService.getCGroupFileSystem();
         cgfs.getMemoryManager().setMemorySwapMax(memorySwapMax);
     }

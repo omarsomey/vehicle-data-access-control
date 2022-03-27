@@ -29,6 +29,7 @@ public class CGroupMemory {
         String availableControllers = Files.readString(Path.of(cgroupPath.toString(), "cgroup.controllers"));
 
         long controllerAvailable = Arrays.stream(availableControllers.split(" "))
+                .map(String::strip)
                 .filter(controller -> controller.equals("memory"))
                 .count();
 
@@ -62,13 +63,13 @@ public class CGroupMemory {
         return Files.readString(Paths.get(cgroupPath.toString(), MEMORY_SWAP_MAX));
     }
 
-    public void setMemoryHigh(int memoryHigh) throws IOException {
+    public void setMemoryHigh(long memoryHigh) throws IOException {
         if (memoryHigh < 1) {
             throw new IllegalArgumentException("Memory limit must be greater than 1 byte.");
         }
 
         Files.writeString(Paths.get(cgroupPath.toString(), MEMORY_HIGH),
-                          Integer.toString(memoryHigh),
+                          Long.toString(memoryHigh),
                           StandardOpenOption.WRITE);
     }
 
@@ -78,13 +79,13 @@ public class CGroupMemory {
                           StandardOpenOption.WRITE);
     }
 
-    public void setMemoryMax(int memoryMax) throws IOException {
+    public void setMemoryMax(long memoryMax) throws IOException {
         if (memoryMax < 1) {
             throw new IllegalArgumentException("Memory limit must be greater than 1 byte.");
         }
 
         Files.writeString(Paths.get(cgroupPath.toString(), MEMORY_MAX),
-                          Integer.toString(memoryMax),
+                          Long.toString(memoryMax),
                           StandardOpenOption.WRITE);
     }
 
@@ -94,13 +95,13 @@ public class CGroupMemory {
                           StandardOpenOption.WRITE);
     }
 
-    public void setMemorySwapHigh(int memorySwapHigh) throws IOException {
+    public void setMemorySwapHigh(long memorySwapHigh) throws IOException {
         if (memorySwapHigh < 1) {
             throw new IllegalArgumentException("Memory limit must be greater than 1 byte.");
         }
 
         Files.writeString(Paths.get(cgroupPath.toString(), MEMORY_SWAP_HIGH),
-                          Integer.toString(memorySwapHigh),
+                          Long.toString(memorySwapHigh),
                           StandardOpenOption.WRITE);
     }
 
@@ -110,13 +111,13 @@ public class CGroupMemory {
                           StandardOpenOption.WRITE);
     }
 
-    public void setMemorySwapMax(int memorySwapMax) throws IOException {
+    public void setMemorySwapMax(long memorySwapMax) throws IOException {
         if (memorySwapMax < 1) {
             throw new IllegalArgumentException("Memory limit must be greater than 1 byte.");
         }
 
         Files.writeString(Paths.get(cgroupPath.toString(), MEMORY_SWAP_MAX),
-                          Integer.toString(memorySwapMax),
+                          Long.toString(memorySwapMax),
                           StandardOpenOption.WRITE);
     }
 

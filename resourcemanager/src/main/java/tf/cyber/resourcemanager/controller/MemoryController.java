@@ -3,8 +3,8 @@ package tf.cyber.resourcemanager.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import tf.cyber.resourcemanager.pep.annotation.XACMLAccessControl;
 import tf.cyber.resourcemanager.pep.annotation.attributes.Resource;
 import tf.cyber.resourcemanager.service.CGroupMemoryService;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/memory")
-@XACMLAccessControl
+//@XACMLAccessControl
 public class MemoryController {
     @Autowired
     private CGroupMemoryService cGroupMemoryService;
@@ -50,48 +50,56 @@ public class MemoryController {
     // ----------------------------------------------------------------------------------
 
     @RequestMapping(value = "/high", method = RequestMethod.POST)
-    public String setMemoryHigh(@Resource("urn:tf:cyber:resourcecontrol:memory:high") int memoryHigh) throws IOException {
+    @ResponseBody
+    public String setMemoryHigh(@Resource("urn:tf:cyber:resourcecontrol:memory:high") long memoryHigh) throws IOException {
         cGroupMemoryService.setMemoryHigh(memoryHigh);
         return "OK";
     }
 
     @RequestMapping(value = "/high/unlimited", method = RequestMethod.POST)
+    @ResponseBody
     public String setMemoryHighUnlimited() throws IOException {
         cGroupMemoryService.setMemoryHighUnlimited();
         return "OK";
     }
 
     @RequestMapping(value = "/max", method = RequestMethod.POST)
-    public String setMemoryMax(@Resource("urn:tf:cyber:resourcecontrol:memory:max") int memoryMax) throws IOException {
+    @ResponseBody
+    public String setMemoryMax(@Resource("urn:tf:cyber:resourcecontrol:memory:max") long memoryMax) throws IOException {
         cGroupMemoryService.setMemoryMax(memoryMax);
         return "OK";
     }
 
     @RequestMapping(value = "/max/unlimited", method = RequestMethod.POST)
+    @ResponseBody
     public String setMemoryMaxUnlimited() throws IOException {
         cGroupMemoryService.setMemoryMaxUnlimited();
         return "OK";
     }
 
     @RequestMapping(value = "/swap_high", method = RequestMethod.POST)
-    public String setMemorySwapHigh(@Resource("urn:tf:cyber:resourcecontrol:memory:swap:high") int swapHigh) throws IOException {
+    @ResponseBody
+    public String setMemorySwapHigh(@Resource("urn:tf:cyber:resourcecontrol:memory:swap:high") long swapHigh) throws IOException {
         cGroupMemoryService.setMemorySwapHigh(swapHigh);
         return "OK";
     }
 
     @RequestMapping(value = "/swap_high/unlimited", method = RequestMethod.POST)
+    @ResponseBody
     public String setMemorySwapHighUnlimited() throws IOException {
         cGroupMemoryService.setMemorySwapHighUnlimited();
         return "OK";
     }
 
     @RequestMapping(value = "/swap_max", method = RequestMethod.POST)
-    public String setMemorySwapMax(@Resource("urn:tf:cyber:resourcecontrol:memory:swap:max") int swapMax) throws IOException {
+    @ResponseBody
+    public String setMemorySwapMax(@Resource("urn:tf:cyber:resourcecontrol:memory:swap:max") long swapMax) throws IOException {
         cGroupMemoryService.setMemorySwapMax(swapMax);
         return "OK";
     }
 
     @RequestMapping(value = "/swap_max/unlimited", method = RequestMethod.POST)
+    @ResponseBody
     public String setMemorySwapMaxUnlimited() throws IOException {
         cGroupMemoryService.setMemorySwapMaxUnlimited();
         return "OK";
