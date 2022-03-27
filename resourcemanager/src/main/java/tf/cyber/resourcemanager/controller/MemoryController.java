@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import tf.cyber.resourcemanager.pep.annotation.XACMLAccessControl;
 import tf.cyber.resourcemanager.pep.annotation.attributes.Resource;
 import tf.cyber.resourcemanager.service.CGroupMemoryService;
 
@@ -12,7 +13,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/memory")
-//@XACMLAccessControl
+@XACMLAccessControl
 public class MemoryController {
     @Autowired
     private CGroupMemoryService cGroupMemoryService;
