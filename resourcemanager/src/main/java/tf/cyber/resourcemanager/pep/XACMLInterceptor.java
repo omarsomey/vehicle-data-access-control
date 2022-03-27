@@ -103,6 +103,12 @@ public class XACMLInterceptor {
         AtomicInteger i = new AtomicInteger(0);
         Arrays.stream(signature.getMethod().getParameterAnnotations()).forEach(parameterAnnotations -> {
             Arrays.stream(parameterAnnotations).forEach(annotation -> {
+                // Ignore null parameters.
+                if (args[i.get()] == null) {
+                    i.addAndGet(1);
+                    return;
+                }
+
                 if (annotation instanceof Subject) {
                     Subject subject = (Subject) annotation;
                     XACMLAttribute<?> subjectAttr = new XACMLAttribute<>(subject.value(),
@@ -250,7 +256,7 @@ public class XACMLInterceptor {
                     attributes.add(XACMLAttribute.of(
                             attrObj.getString("AttributeId"),
                             attrObj.getString("DataType"),
-                            null, // Obligations do not specify any data types.
+                            null, // Obligations do not specify any category types.
                             attrObj.getString("Value")
                     ));
                 });

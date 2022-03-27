@@ -1,10 +1,12 @@
 package tf.cyber.resourcemanager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import tf.cyber.resourcemanager.pep.annotation.XACMLAccessControl;
 import tf.cyber.resourcemanager.pep.annotation.attributes.Resource;
 import tf.cyber.resourcemanager.service.CGroupMemoryService;
@@ -52,7 +54,12 @@ public class MemoryController {
 
     @RequestMapping(value = "/high", method = RequestMethod.POST)
     @ResponseBody
-    public String setMemoryHigh(@Resource("urn:tf:cyber:resourcecontrol:memory:high") long memoryHigh) throws IOException {
+    public String setMemoryHigh(@Resource("urn:tf:cyber:resourcecontrol:memory:high") Long memoryHigh) throws IOException {
+        if (memoryHigh == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No memoryHigh parameter " +
+                    "specified.", new IllegalArgumentException());
+        }
+
         cGroupMemoryService.setMemoryHigh(memoryHigh);
         return "OK";
     }
@@ -66,7 +73,12 @@ public class MemoryController {
 
     @RequestMapping(value = "/max", method = RequestMethod.POST)
     @ResponseBody
-    public String setMemoryMax(@Resource("urn:tf:cyber:resourcecontrol:memory:max") long memoryMax) throws IOException {
+    public String setMemoryMax(@Resource("urn:tf:cyber:resourcecontrol:memory:max") Long memoryMax) throws IOException {
+        if (memoryMax == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No memoryMax parameter " +
+                    "specified.", new IllegalArgumentException());
+        }
+
         cGroupMemoryService.setMemoryMax(memoryMax);
         return "OK";
     }
@@ -80,7 +92,12 @@ public class MemoryController {
 
     @RequestMapping(value = "/swap_high", method = RequestMethod.POST)
     @ResponseBody
-    public String setMemorySwapHigh(@Resource("urn:tf:cyber:resourcecontrol:memory:swap:high") long swapHigh) throws IOException {
+    public String setMemorySwapHigh(@Resource("urn:tf:cyber:resourcecontrol:memory:swap:high") Long swapHigh) throws IOException {
+        if (swapHigh == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No swapHigh parameter " +
+                    "specified.", new IllegalArgumentException());
+        }
+
         cGroupMemoryService.setMemorySwapHigh(swapHigh);
         return "OK";
     }
@@ -94,7 +111,12 @@ public class MemoryController {
 
     @RequestMapping(value = "/swap_max", method = RequestMethod.POST)
     @ResponseBody
-    public String setMemorySwapMax(@Resource("urn:tf:cyber:resourcecontrol:memory:swap:max") long swapMax) throws IOException {
+    public String setMemorySwapMax(@Resource("urn:tf:cyber:resourcecontrol:memory:swap:max") Long swapMax) throws IOException {
+        if (swapMax == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No swapMax parameter " +
+                    "specified.", new IllegalArgumentException());
+        }
+
         cGroupMemoryService.setMemorySwapMax(swapMax);
         return "OK";
     }

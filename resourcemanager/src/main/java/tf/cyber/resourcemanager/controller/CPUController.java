@@ -1,7 +1,9 @@
 package tf.cyber.resourcemanager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import tf.cyber.resourcemanager.pep.annotation.XACMLAccessControl;
 import tf.cyber.resourcemanager.pep.annotation.attributes.Resource;
 import tf.cyber.resourcemanager.service.CGroupCPUService;
@@ -17,13 +19,23 @@ public class CPUController {
 
     @RequestMapping(value = "/nice", method = RequestMethod.POST)
     @ResponseBody
-    public String setNice(@RequestParam @Resource("urn:tf:cyber:resourcecontrol:cpu:nice") Integer niceValue) throws IOException {
+    public String setNice(@Resource("urn:tf:cyber:resourcecontrol:cpu:nice") Integer niceValue) throws IOException {
+        if (niceValue == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No niceValue parameter " +
+                    "specified.", new IllegalArgumentException());
+        }
+
         cGroupCPUService.setNiceValue(niceValue);
         return "OK";
     }
 
     @RequestMapping(value = "/time", method = RequestMethod.POST)
-    public String setCPUTime(@RequestParam @Resource("urn:tf:cyber:resourcecontrol:cpu:time") Integer time) throws IOException {
+    public String setCPUTime(@Resource("urn:tf:cyber:resourcecontrol:cpu:time") Integer time) throws IOException {
+        if (time == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No time parameter " +
+                    "specified.", new IllegalArgumentException());
+        }
+
         cGroupCPUService.setCPUMax(time);
         return "OK";
     }
@@ -35,9 +47,20 @@ public class CPUController {
     }
 
     @RequestMapping(value = "/time/fractional", method = RequestMethod.POST)
-    public String setCPUTimeWithFraction(@RequestParam @Resource("urn:tf:cyber:resourcecontrol:cpu:time") Integer time,
-                                         @RequestParam(required = false) @Resource("urn:tf:cyber:resourcecontrol:cpu:fraction") Integer fraction)
+    public String setCPUTimeWithFraction(@RequestParam @Resource("urn:tf:cyber:resourcecontrol" +
+            ":cpu:time") Integer time,
+                                         @Resource("urn:tf:cyber:resourcecontrol:cpu:fraction") Integer fraction)
             throws IOException {
+        if (time == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No time parameter " +
+                    "specified.", new IllegalArgumentException());
+        }
+
+        if (fraction == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No fraction parameter " +
+                    "specified.", new IllegalArgumentException());
+        }
+
         cGroupCPUService.setCPUMax(time, fraction);
         return "OK";
     }
