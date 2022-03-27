@@ -6,18 +6,25 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.AbstractMap;
 import java.util.Map;
 
 public class XACMLMapper {
-    public final static Map<Class<?>, JavaToXACMLMapper> dataMapper = Map.of(
-            String.class, new StringValueMapper(),
-            Boolean.class, new BooleanValueMapper(),
-            Integer.class, new IntegerValueMapper(),
-            Double.class, new DoubleValueMapper(),
-            LocalTime.class, new LocalTimeValueMapper(),
-            LocalDate.class, new LocalDateValueMapper(),
-            LocalDateTime.class, new LocalDateTimeValueMapper(),
-            URI.class, new URIValueMapper()
+    public final static Map<Class<?>, JavaToXACMLMapper> dataMapper = Map.ofEntries(
+            new AbstractMap.SimpleEntry<>(String.class, new StringValueMapper()),
+            new AbstractMap.SimpleEntry<>(Boolean.class, new BooleanValueMapper()),
+            new AbstractMap.SimpleEntry<>(Integer.class, new IntegerValueMapper()),
+            new AbstractMap.SimpleEntry<>(int.class, new IntegerValueMapper()),
+            new AbstractMap.SimpleEntry<>(Double.class, new DoubleValueMapper()),
+            new AbstractMap.SimpleEntry<>(double.class, new DoubleValueMapper()),
+            new AbstractMap.SimpleEntry<>(Short.class, new ShortValueMapper()),
+            new AbstractMap.SimpleEntry<>(short.class, new ShortValueMapper()),
+            new AbstractMap.SimpleEntry<>(Long.class, new LongValueMapper()),
+            new AbstractMap.SimpleEntry<>(long.class, new LongValueMapper()),
+            new AbstractMap.SimpleEntry<>(LocalTime.class, new LocalTimeValueMapper()),
+            new AbstractMap.SimpleEntry<>(LocalDate.class, new LocalDateValueMapper()),
+            new AbstractMap.SimpleEntry<>(LocalDateTime.class, new LocalDateTimeValueMapper()),
+            new AbstractMap.SimpleEntry<>(URI.class, new URIValueMapper())
     );
 
     private XACMLMapper() {
@@ -28,7 +35,7 @@ public class XACMLMapper {
         if (dataMapper.containsKey(o.getClass())) {
             return dataMapper.get(o.getClass()).map(o);
         } else {
-            throw new UnsupportedDataTypeException();
+            throw new UnsupportedDataTypeException(o.getClass());
         }
     }
 }

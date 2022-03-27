@@ -21,6 +21,11 @@
 
   <Rule
           Effect="Permit"
+          RuleId="PermitAll">
+  </Rule>
+
+  <Rule
+          Effect="Permit"
           RuleId="RestrictCPUTime">
 
     <Target>
@@ -60,7 +65,7 @@
       <AnyOf>
         <AllOf>
           <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/cpu/time_with_fraction</AttributeValue>
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/cpu/time/fractional</AttributeValue>
             <AttributeDesignator
                     Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
                     AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
@@ -131,7 +136,7 @@
     </Target>
 
     <Condition>
-      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-greater-than-or-equal">
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-greater-than">
         <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-one-and-only">
           <AttributeDesignator
                   Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"

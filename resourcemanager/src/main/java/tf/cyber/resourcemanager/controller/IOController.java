@@ -21,7 +21,7 @@ public class IOController {
     @ResponseBody
     public String setIORbps(@Resource("urn:tf:cyber:resourcecontrol:io:devicemaj") Short deviceMaj,
                             @Resource("urn:tf:cyber:resourcecontrol:io:devicemin") Short deviceMin,
-                            @Resource("urn:tf:cyber:resourcecontrol:io:rbps") Short rbps) throws IOException {
+                            @Resource("urn:tf:cyber:resourcecontrol:io:rbps") Long rbps) throws IOException {
         cGroupIOService.setIOLimitRbps(deviceMaj, deviceMin, rbps);
         return "OK";
     }
@@ -30,7 +30,7 @@ public class IOController {
     @ResponseBody
     public String setIOWbps(@Resource("urn:tf:cyber:resourcecontrol:io:devicemaj") Short deviceMaj,
                             @Resource("urn:tf:cyber:resourcecontrol:io:devicemin") Short deviceMin,
-                            @Resource("urn:tf:cyber:resourcecontrol:io:wbps") Short wbps) throws IOException {
+                            @Resource("urn:tf:cyber:resourcecontrol:io:wbps") Long wbps) throws IOException {
         cGroupIOService.setIOLimitWbps(deviceMaj, deviceMin, wbps);
         return "OK";
     }
@@ -39,7 +39,7 @@ public class IOController {
     @ResponseBody
     public String setIORiops(@Resource("urn:tf:cyber:resourcecontrol:io:devicemaj") Short deviceMaj,
                              @Resource("urn:tf:cyber:resourcecontrol:io:devicemin") Short deviceMin,
-                             @Resource("urn:tf:cyber:resourcecontrol:io:riops") Short riops) throws IOException {
+                             @Resource("urn:tf:cyber:resourcecontrol:io:riops") Long riops) throws IOException {
         cGroupIOService.setIOLimitRiops(deviceMaj, deviceMin, riops);
         return "OK";
     }
@@ -48,7 +48,7 @@ public class IOController {
     @ResponseBody
     public String setIOWiops(@Resource("urn:tf:cyber:resourcecontrol:io:devicemaj") Short deviceMaj,
                              @Resource("urn:tf:cyber:resourcecontrol:io:devicemin") Short deviceMin,
-                             @Resource("urn:tf:cyber:resourcecontrol:io:wiops") Short wiops) throws IOException {
+                             @Resource("urn:tf:cyber:resourcecontrol:io:wiops") Long wiops) throws IOException {
         cGroupIOService.setIOLimitWiops(deviceMaj, deviceMin, wiops);
         return "OK";
     }
@@ -57,10 +57,10 @@ public class IOController {
     @ResponseBody
     public String setIOLimits(@Resource("urn:tf:cyber:resourcecontrol:io:devicemaj") Short deviceMaj,
                               @Resource("urn:tf:cyber:resourcecontrol:io:devicemin") Short deviceMin,
-                              @Resource("urn:tf:cyber:resourcecontrol:io:rbps") Short rbps,
-                              @Resource("urn:tf:cyber:resourcecontrol:io:wbps") Short wbps,
-                              @Resource("urn:tf:cyber:resourcecontrol:io:riops") Short riops,
-                              @Resource("urn:tf:cyber:resourcecontrol:io:wiops") Short wiops) throws IOException {
+                              @Resource("urn:tf:cyber:resourcecontrol:io:rbps") Long rbps,
+                              @Resource("urn:tf:cyber:resourcecontrol:io:wbps") Long wbps,
+                              @Resource("urn:tf:cyber:resourcecontrol:io:riops") Long riops,
+                              @Resource("urn:tf:cyber:resourcecontrol:io:wiops") Long wiops) throws IOException {
         cGroupIOService.setIOLimits(deviceMaj, deviceMin, rbps, wbps, riops, wiops);
         return "OK";
     }

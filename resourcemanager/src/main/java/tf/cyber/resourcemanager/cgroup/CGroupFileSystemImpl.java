@@ -1,6 +1,7 @@
 package tf.cyber.resourcemanager.cgroup;
 
 import tf.cyber.resourcemanager.cgroup.controllers.CGroupCPU;
+import tf.cyber.resourcemanager.cgroup.controllers.CGroupCPUSet;
 import tf.cyber.resourcemanager.cgroup.controllers.CGroupIO;
 import tf.cyber.resourcemanager.cgroup.controllers.CGroupMemory;
 
@@ -11,6 +12,7 @@ import java.nio.file.Paths;
 
 public class CGroupFileSystemImpl implements CGroupFileSystem {
     private CGroupCPU CGroupCPU;
+    private CGroupCPUSet cGroupCPUSet;
     private CGroupMemory cGroupMemory;
     private CGroupIO cGroupIO;
 
@@ -46,6 +48,7 @@ public class CGroupFileSystemImpl implements CGroupFileSystem {
         }
 
         this.CGroupCPU = new CGroupCPU(userFs);
+        this.cGroupCPUSet = new CGroupCPUSet(userFs);
         this.cGroupMemory = new CGroupMemory(userFs);
         this.cGroupIO = new CGroupIO(userFs);
     }
@@ -53,6 +56,11 @@ public class CGroupFileSystemImpl implements CGroupFileSystem {
     @Override
     public CGroupCPU getCPUManager() {
         return CGroupCPU;
+    }
+
+    @Override
+    public CGroupCPUSet getCPUSetManager() {
+        return cGroupCPUSet;
     }
 
     @Override

@@ -13,6 +13,8 @@ public final class DataTypes {
             String.class, "http://www.w3.org/2001/XMLSchema#string",
             Boolean.class, "http://www.w3.org/2001/XMLSchema#boolean",
             Integer.class, "http://www.w3.org/2001/XMLSchema#integer",
+            Short.class, "http://www.w3.org/2001/XMLSchema#integer", // XMLSchema only offers integer
+            Long.class, "http://www.w3.org/2001/XMLSchema#integer", // XMLSchema only offers integer, can fit long
             Double.class, "http://www.w3.org/2001/XMLSchema#double",
             LocalTime.class, "http://www.w3.org/2001/XMLSchema#time",
             LocalDate.class, "http://www.w3.org/2001/XMLSchema#date",
@@ -30,7 +32,7 @@ public final class DataTypes {
         if (dataTypes.containsKey(o)) {
             return dataTypes.get(o);
         } else {
-            throw new UnsupportedDataTypeException();
+            throw new UnsupportedDataTypeException(o);
         }
     }
 
