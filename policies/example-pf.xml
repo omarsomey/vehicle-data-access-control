@@ -22,6 +22,20 @@
   <Rule
           Effect="Permit"
           RuleId="CameraData">
+    <Target>
+      <AnyOf>
+        <AllOf>
+          <Match MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">/vehicle/camera</AttributeValue>
+            <AttributeDesignator
+                    Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+                    AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+                    MustBePresent="true"
+                    DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </Match>
+        </AllOf>
+      </AnyOf>
+    </Target>
     <Condition>
         <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-greater-than-or-equal">
             <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-one-and-only">
@@ -58,5 +72,4 @@
       </AttributeAssignmentExpression>
     </ObligationExpression>
   </ObligationExpressions>
-
 </Policy>
