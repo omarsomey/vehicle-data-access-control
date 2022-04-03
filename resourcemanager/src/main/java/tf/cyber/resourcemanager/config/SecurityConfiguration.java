@@ -19,6 +19,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .withUser("smartsurance")
                 .password(passwordEncoder().encode("smartsurance")).roles("user")
                 .and()
+                .withUser("floppybird")
+                .password(passwordEncoder().encode("floppybird")).roles("user")
+                .and()
                 .withUser("trafficaggregator")
                 .password(passwordEncoder().encode("trafficaggregator")).roles("user");
     }
