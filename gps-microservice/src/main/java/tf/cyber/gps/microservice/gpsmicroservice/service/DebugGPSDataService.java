@@ -15,8 +15,8 @@ public class DebugGPSDataService implements GPSDataService {
                 .antennaAltitude(400d)
                 .usedSatellites(5)
                 .quality(GPSData.GPSQuality.UNCORRECTED_COORDINATE)
-                .longitude(50.0d)
-                .latitude(50.0d)
+                .longitude(13.43122d)
+                .latitude(48.5665d)
                 .timestamp(0d)
                 .build();
     }
