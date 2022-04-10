@@ -2,26 +2,23 @@
   <div class="card">
     <h5 class="card-header">{{ name }}</h5>
     <div class="card-body">
-      <div v-if="value && !error">
+      <div v-if="value">
         <h2 class="card-title d-inline mr-1">{{ value }}</h2>
         {{ unit }}
+      </div>
 
-        <div class="text-center w-100">
-          <v-slider
-            :min="500"
-            :max="5000"
-            v-model="refreshInterval"
-            class="w-100"
-          ></v-slider>
-          <div class="mt-3">
-            Refresh Interval:
-            <input
-              v-model="refreshInterval"
-              type="number"
-              min="500"
-              max="5000"
-            />
-          </div>
+      <div class="text-center w-100">
+        <v-slider
+          :min="500"
+          :max="5000"
+          v-model="refreshInterval"
+          class="w-100"
+        ></v-slider>
+      <div v-if="error">Access failed.</div>
+
+        <div class="mt-3">
+          Refresh Interval:
+          <input v-model="refreshInterval" type="number" min="500" max="5000" />
         </div>
       </div>
 
@@ -44,7 +41,7 @@ export default {
     endpoint: String,
     name: String,
     unit: String,
-    dataKey: String
+    dataKey: String,
   },
   async mounted() {
     await this.fetch();
@@ -55,9 +52,7 @@ export default {
       let response = null;
 
       try {
-        response = await this.$http.get(
-          this.endpoint
-        );
+        response = await this.$http.get(this.endpoint);
         this.value = response.data[this.dataKey];
         this.error = false;
       } catch (error) {
