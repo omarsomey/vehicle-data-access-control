@@ -20,7 +20,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .password(passwordEncoder().encode("demo")).roles("user")
                 .and()
                 .withUser("gpxtrack")
-                .password(passwordEncoder().encode("demo")).roles("user");
+                .password(passwordEncoder().encode("demo")).roles("user")
+                .and()
+                .withUser("smartsurance")
+                .password(passwordEncoder().encode("smartsurance")).roles("user");;
     }
 
     @Override
