@@ -14,19 +14,49 @@
       </b-navbar>
     </div>
 
-    <div class="container-fluid mb-2">
-      <div id="gps" class="row">
+    <div class="container-fluid">
+      <div id="gps" class="row mb-4">
         <GPSMap class="w-100" endpoint="/vehicle/location" />
       </div>
     </div>
 
-    <div class="container-fluid mt-2 mb-2">
+    <div class="container-fluid mt-4 mb-2">
       <div id="values" class="row">
         <div id="values" class="card-columns col-12">
-        <ValueCard name="Vehicle Speed" unit="km/h" endpoint="/vehicle/vehicleSpeed" dataKey="vehicle_speed" />
-        <ValueCard name="Engine Speed" unit="rpm" endpoint="/vehicle/engineSpeed" dataKey="engine_speed" />
-        <ValueCard name="Throttle Position" unit="%" endpoint="/vehicle/throttlePosition" dataKey="throttle_position" />
+          <ValueCard
+            name="Vehicle Speed"
+            unit="km/h"
+            endpoint="/vehicle/vehicleSpeed"
+            dataKey="vehicle_speed"
+          />
+          <ValueCard
+            name="Engine Speed"
+            unit="rpm"
+            endpoint="/vehicle/engineSpeed"
+            dataKey="engine_speed"
+          />
+          <ValueCard
+            name="Throttle Position"
+            unit="%"
+            endpoint="/vehicle/throttlePosition"
+            dataKey="throttle_position"
+          />
+        </div>
       </div>
+    </div>
+
+    <b-modal ref="resource-manager" hide-footer title="Resource Management">
+      <ResourceManager/>
+      <b-button class="mt-3" variant="danger" block @click="hideModal"
+        >Close</b-button
+      >
+    </b-modal>
+
+    <div class="container-fluid mb-4">
+      <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+          <b-button id="show-btn" variant="primary" @click="showModal">Open Resource Manager</b-button>
+        </div>
       </div>
     </div>
   </div>
@@ -34,16 +64,26 @@
 
 <script>
 import GPSMap from "./components/GPSMap.vue";
+import ResourceManager from "./components/ResourceManager.vue";
 import ValueCard from "./components/ValueCard.vue";
 
 export default {
   name: "App",
   components: {
     GPSMap,
+    ResourceManager,
     ValueCard,
   },
   data() {
     return {};
+  },
+  methods: {
+    showModal() {
+      this.$refs["resource-manager"].show();
+    },
+    hideModal() {
+      this.$refs["resource-manager"].hide();
+    },
   },
 };
 </script>

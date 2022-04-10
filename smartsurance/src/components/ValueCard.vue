@@ -14,11 +14,15 @@
           v-model="refreshInterval"
           class="w-100"
         ></v-slider>
-      <div v-if="error">Access failed.</div>
+        <div v-if="error">Access failed.</div>
 
         <div class="mt-3">
           Refresh Interval:
-          <input v-model="refreshInterval" type="number" min="500" max="5000" />
+          <b-form-input
+            v-model="refreshInterval"
+            type="number"
+            required
+          ></b-form-input>
         </div>
       </div>
 

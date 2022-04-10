@@ -9,7 +9,7 @@ import config from '@/config'
 let axiosConfig = axios.create({
   withCredentials: true,
   baseURL: config.dataSource,
-  auth: {username: config.username, password: config.password}
+  auth: { username: config.username, password: config.password }
 })
 
 Vue.use(VueAxios, axiosConfig)
@@ -33,6 +33,10 @@ import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 
 Vue.component('v-slider', VueSlider)
+
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
+Vue.use(Toast, {});
 
 Vue.config.productionTip = false
 

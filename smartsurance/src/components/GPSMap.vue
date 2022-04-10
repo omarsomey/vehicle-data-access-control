@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="gpsWidget">
+    <div id="gpsWidget" class="mb-2">
       <div id="gpsMap" v-if="position">
         <l-map class="gps" :zoom="zoom" :center="position">
           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
@@ -41,7 +41,11 @@
         ></v-slider>
 
         GPS Refresh Interval:
-        <input v-model="refreshInterval" type="number" min="500" max="5000" />
+        <b-form-input
+          v-model="refreshInterval"
+          type="number"
+          required
+        ></b-form-input>
       </div>
     </div>
   </div>
@@ -78,9 +82,7 @@ export default {
       let response = null;
 
       try {
-        response = await this.$http.get(
-          this.endpoint
-        );
+        response = await this.$http.get(this.endpoint);
         this.position = [response.data.latitude, response.data.longitude];
         this.error = false;
       } catch (error) {
