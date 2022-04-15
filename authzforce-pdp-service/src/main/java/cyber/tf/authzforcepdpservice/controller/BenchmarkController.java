@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +37,7 @@ public class BenchmarkController {
             consumes = {"application/xml", "application/xacml+xml"},
             produces = {"text/csv"}
     )
-    public String evaluateXML(@RequestBody String requestString) throws JAXBException {
+    public ResponseEntity evaluateXML(@RequestBody String requestString) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(Request.class);
         Request request = (Request) context.createUnmarshaller().unmarshal(new StringReader(requestString));
 
@@ -56,7 +57,7 @@ public class BenchmarkController {
 
         logger.info("Finished benchmarking XACXML XML request.");
 
-        return benchmark.toCSV();
+        return ResponseEntity.ok().body(benchmark.toCSV());
     }
 
     @RequestMapping(value = "/authorize",
@@ -64,7 +65,7 @@ public class BenchmarkController {
             consumes = {"application/json", "application/xacml+json"},
             produces = {"text/csv"}
     )
-    public String evaluateJSON(@RequestBody String request) {
+    public ResponseEntity evaluateJSON(@RequestBody String request) {
         JSONObject json = new JSONObject(new JSONTokener(request));
 
         int runs = Integer.parseInt(env.getProperty("benchmark.runs"));
@@ -82,6 +83,7 @@ public class BenchmarkController {
         }
 
         logger.info("Finished benchmarking XACXML JSON request.");
-        return benchmark.toCSV();
+
+        return ResponseEntity.ok().body(benchmark.toCSV());
     }
 }
