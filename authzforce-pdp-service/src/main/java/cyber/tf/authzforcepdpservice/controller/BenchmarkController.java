@@ -82,7 +82,6 @@ public class BenchmarkController {
         }
 
         logger.info("Finished benchmarking XACXML JSON request.");
-        System.out.println(benchmark.toCSV());
         return benchmark.toCSV();
     }
 }
