@@ -40,6 +40,7 @@
             unit="%"
             endpoint="/vehicle/throttlePosition"
             dataKey="throttle_position"
+            :roundNumber="2"
           />
         </div>
       </div>

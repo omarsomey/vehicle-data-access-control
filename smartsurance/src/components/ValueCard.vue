@@ -46,6 +46,7 @@ export default {
     name: String,
     unit: String,
     dataKey: String,
+    roundNumber: Number
   },
   async mounted() {
     await this.fetch();
@@ -57,7 +58,13 @@ export default {
 
       try {
         response = await this.$http.get(this.endpoint);
-        this.value = response.data[this.dataKey];
+
+        if (this.roundNumber != null) {
+            this.value = response.data[this.dataKey].toFixed(this.roundNumber);
+        } else {
+            this.value = response.data[this.dataKey];
+        }
+
         this.error = false;
       } catch (error) {
         this.error = true;
