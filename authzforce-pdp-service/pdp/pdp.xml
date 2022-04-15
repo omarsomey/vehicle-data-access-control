@@ -31,5 +31,5 @@
         <policyLocation>policies/provider-test.xml</policyLocation>
     </policyProvider>
 
-    <rootPolicyRef>provider-test</rootPolicyRef>
+    <rootPolicyRef>SmartSuranceSet</rootPolicyRef>
 </pdp>
