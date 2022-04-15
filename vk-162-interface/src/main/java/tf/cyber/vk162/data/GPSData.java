@@ -2,9 +2,11 @@ package tf.cyber.vk162.data;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Builder
 @Getter
+@Setter
 public class GPSData {
     private String header;
     private double timestamp;

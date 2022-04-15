@@ -2,12 +2,20 @@ package tf.cyber.vk162.io;
 
 import com.github.jkschneider.netty.jssc.simple.SimpleLineBasedSerialChannel;
 import tf.cyber.vk162.data.GPSData;
-
 public class VK162Connection {
     private static VK162Connection connection;
 
     private SimpleLineBasedSerialChannel channel;
-    private GPSData gpsData;
+    private GPSData gpsData = GPSData.builder()
+                .header("HEADER")
+                .antennaAltitudeUnit(GPSData.AltitudeUnit.METER)
+                .antennaAltitude(0d)
+                .usedSatellites(0)
+                .quality(GPSData.GPSQuality.UNCORRECTED_COORDINATE)
+                .longitude(0d)
+                .latitude(0d)
+                .timestamp(0d)
+                .build();;
 
     public static void main(String[] args) {
         init("/dev/ttyACM0");
@@ -31,10 +39,13 @@ public class VK162Connection {
 
         this.channel = new SimpleLineBasedSerialChannel(portIdentifier,
                                                         (ctx, msg) -> {
-                                                            synchronized (this) {
+                                                            synchronized (gpsData) {
                                                                 if (msg.startsWith("$GPGGA")) {
-                                                                    this.gpsData =
-                                                                            handleGPSData(msg);
+                                                                    try {
+                                                                        handleGPSData(msg);
+                                                                    } catch (Exception e) {
+                                                                        System.err.println("Failed to parse GPS data. Check signal.");
+                                                                    }
                                                                 }
                                                             }
                                                         });
@@ -42,7 +53,7 @@ public class VK162Connection {
         //this.channel.write(Unpooled.wrappedBuffer(updateRateCmd));
     }
 
-    private GPSData handleGPSData(String rawData) {
+    private void handleGPSData(String rawData) {
         String[] fragments = rawData.split(",");
 
         String header = fragments[0];
@@ -70,18 +81,14 @@ public class VK162Connection {
             antennaAltitudeUnit = GPSData.AltitudeUnit.fromResponse(fragments[10]);
         }
 
-        GPSData data = GPSData.builder()
-                .header(header)
-                .timestamp(timestamp)
-                .latitude(latitude)
-                .longitude(longitude)
-                .quality(quality)
-                .usedSatellites(satelliteCount)
-                .antennaAltitude(antennaAltitude)
-                .antennaAltitudeUnit(antennaAltitudeUnit)
-                .build();
-
-        return data;
+        gpsData.setHeader(header);
+        gpsData.setTimestamp(timestamp);
+        gpsData.setLatitude(latitude);
+        gpsData.setLongitude(longitude);
+        gpsData.setQuality(quality);
+        gpsData.setUsedSatellites(satelliteCount);
+        gpsData.setAntennaAltitude(antennaAltitude);
+        gpsData.setAntennaAltitudeUnit(antennaAltitudeUnit);
     }
 
     public synchronized GPSData getGpsData() {
