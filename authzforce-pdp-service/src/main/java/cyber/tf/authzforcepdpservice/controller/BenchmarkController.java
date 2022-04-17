@@ -42,6 +42,13 @@ public class BenchmarkController {
         Request request = (Request) context.createUnmarshaller().unmarshal(new StringReader(requestString));
 
         int runs = Integer.parseInt(env.getProperty("benchmark.runs"));
+        int warmupRuns = Integer.parseInt(env.getProperty("benchmark.warmup.runs"));
+
+        logger.info("Warm-Up for benchmarking XACXML XML request.");
+
+        for (int i = 0; i < warmupRuns; i++) {
+            Response res = pdpService.getXMLAdapter().evaluate(request);
+        }
 
         Benchmark benchmark = new Benchmark();
 
@@ -69,6 +76,13 @@ public class BenchmarkController {
         JSONObject json = new JSONObject(new JSONTokener(request));
 
         int runs = Integer.parseInt(env.getProperty("benchmark.runs"));
+        int warmupRuns = Integer.parseInt(env.getProperty("benchmark.warmup.runs"));
+
+        logger.info("Warm-Up for benchmarking XACXML JSON request.");
+
+        for (int i = 0; i < warmupRuns; i++) {
+            JSONObject res = pdpService.getJSONAdapter().evaluate(json);
+        }
 
         Benchmark benchmark = new Benchmark();
 
