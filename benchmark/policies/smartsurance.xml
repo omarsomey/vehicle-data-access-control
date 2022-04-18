@@ -515,11 +515,4 @@
             </ObligationExpression>
         </ObligationExpressions>
     </Policy>
-
-    <Policy PolicyId="SmartSuranceDenyAll" Version="1.0" RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:first-applicable">
-        <Target/>
-        <Rule RuleId="DenyAll" Effect="Deny">
-            <Description>Explicitly denies all remaining types of requests.</Description>
-        </Rule>
-    </Policy>
 </PolicySet>
