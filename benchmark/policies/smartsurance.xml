@@ -263,8 +263,8 @@
                                     DataType="http://www.w3.org/2001/XMLSchema#dateTime"
                                     MustBePresent="false"/>
                         </Apply>
-                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">1+01:00</AttributeValue>
-                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">5+01:00</AttributeValue>
+                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">1+02:00</AttributeValue>
+                        <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">5+02:00</AttributeValue>
                     </Apply>
 
                     <Apply FunctionId="urn:oasis:names:tc:xacml:2.0:function:time-in-range">
@@ -276,8 +276,8 @@
                                     MustBePresent="true"/>
                         </Apply>
                         <!-- NOTICE for future work: AuthzForce appears to cause issues on Windows related to time zones. Use Linux or macOS instead! -->
-                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#time">09:00:00+01:00</AttributeValue>
-                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#time">15:00:00+01:00</AttributeValue>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#time">09:00:00+02:00</AttributeValue>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#time">15:00:00+02:00</AttributeValue>
                     </Apply>
                 </Apply>
             </Condition>
