@@ -2,20 +2,24 @@ package tf.cyber.vk162.io;
 
 import com.github.jkschneider.netty.jssc.simple.SimpleLineBasedSerialChannel;
 import tf.cyber.vk162.data.GPSData;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class VK162Connection {
     private static VK162Connection connection;
 
-    private SimpleLineBasedSerialChannel channel;
-    private GPSData gpsData = GPSData.builder()
+    private final SimpleLineBasedSerialChannel channel;
+    private final GPSData gpsData = GPSData.builder()
                 .header("HEADER")
                 .antennaAltitudeUnit(GPSData.AltitudeUnit.METER)
                 .antennaAltitude(0d)
                 .usedSatellites(0)
                 .quality(GPSData.GPSQuality.UNCORRECTED_COORDINATE)
-                .longitude(0d)
-                .latitude(0d)
+                .longitude(BigDecimal.ZERO)
+                .latitude(BigDecimal.ZERO)
                 .timestamp(0d)
-                .build();;
+                .build();
 
     public static void main(String[] args) {
         init("/dev/ttyACM0");
@@ -39,7 +43,7 @@ public class VK162Connection {
 
         this.channel = new SimpleLineBasedSerialChannel(portIdentifier,
                                                         (ctx, msg) -> {
-                                                            synchronized (gpsData) {
+                                                            synchronized (this) {
                                                                 if (msg.startsWith("$GPGGA")) {
                                                                     try {
                                                                         handleGPSData(msg);
@@ -59,12 +63,12 @@ public class VK162Connection {
         String header = fragments[0];
         double timestamp = Double.parseDouble(fragments[1]);
 
-        double latitude = -1.0d;
+        BigDecimal latitude = BigDecimal.valueOf(-1.0d);
         if (!fragments[2].equals("")) {
             latitude = calculateLatLonFromNMEA(fragments[2]);
         }
 
-        double longitude = -1.0d;
+        BigDecimal longitude = BigDecimal.valueOf(-1.0d);
         if (!fragments[4].equals("")) {
             longitude = calculateLatLonFromNMEA(fragments[4]);
         }
@@ -100,7 +104,7 @@ public class VK162Connection {
         connection = null;
     }
 
-    private static double calculateLatLonFromNMEA(String input) {
+    private static BigDecimal calculateLatLonFromNMEA(String input) {
         String[] parts = input.split("\\.");
         String first = parts[0];
         String second = parts[1];
@@ -109,12 +113,12 @@ public class VK162Connection {
         int digitCount = first.length();
         int digitSplit = digitCount == 4 ? 2 : 3;
 
-        int hours = Integer.parseInt(first.substring(0, digitSplit));
-        double minutes = Integer.parseInt(first.substring(digitSplit));
+        BigDecimal hours = new BigDecimal(first.substring(0, digitSplit));
+        BigDecimal minutes = new BigDecimal(first.substring(digitSplit));
 
         // Second part are minute decimal places.
-        minutes += Double.parseDouble("0." + second);
+        minutes = minutes.add(new BigDecimal("0." + second));
 
-        return hours + (minutes / 60);
+        return hours.add(minutes.divide(BigDecimal.valueOf(60d), 16, RoundingMode.HALF_UP));
     }
 }

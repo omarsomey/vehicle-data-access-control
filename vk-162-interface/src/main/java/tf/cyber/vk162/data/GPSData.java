@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Builder
 @Getter
 @Setter
@@ -11,8 +13,8 @@ public class GPSData {
     private String header;
     private double timestamp;
 
-    private double longitude;
-    private double latitude;
+    private BigDecimal longitude;
+    private BigDecimal latitude;
 
     private GPSQuality quality;
     private int usedSatellites;
