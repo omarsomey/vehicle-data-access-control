@@ -109,10 +109,11 @@ export default {
   props: {},
   methods: {
     async setCPUTime() {
+      let formData = new FormData()
+      formData.append('time', this.cputime);
+
       try {
-        await this.$http.post(urljoin(this.endpoint, "/cpu/time"), {
-          time: this.cputime,
-        });
+        await this.$http.post(urljoin(this.endpoint, "/cpu/time"), formData);
         this.$toast.success("Successfully set CPU time.");
       } catch (error) {
         this.$toast.error(
@@ -121,10 +122,11 @@ export default {
       }
     },
     async setMemoryHigh() {
+      let formData = new FormData()
+      formData.append('memoryHigh', this.memoryhigh);
+
       try {
-        await this.$http.post(urljoin(this.endpoint, "/memory/high"), {
-          memoryHigh: this.memoryhigh,
-        });
+        await this.$http.post(urljoin(this.endpoint, "/memory/high"), formData);
         this.$toast.success("Successfully set memory high value.");
       } catch (error) {
         this.$toast.error(
@@ -133,10 +135,11 @@ export default {
       }
     },
     async setMemoryMax() {
+      let formData = new FormData()
+      formData.append('memoryMax', this.memorymax);
+
       try {
-        await this.$http.post(urljoin(this.endpoint, "/memory/max"), {
-          memoryMax: this.memorymax,
-        });
+        await this.$http.post(urljoin(this.endpoint, "/memory/max"), formData);
         this.$toast.success("Successfully set memory max value.");
       } catch (error) {
         this.$toast.error(
@@ -145,12 +148,17 @@ export default {
       }
     },
     async setDiskRead() {
+      let formData = new FormData()
+      formData.append('deviceMaj', config.deviceMaj);
+      formData.append('deviceMin', config.deviceMin);
+      formData.append('rbps', parseInt(this.diskread));
+      for (var value of formData.values()) {
+   console.log(value);
+}
+
+
       try {
-        await this.$http.post(urljoin(this.endpoint, "/io/rbps"), {
-          deviceMaj: config.deviceMaj,
-          deviceMin: config.deviceMin,
-          rbps: this.diskread,
-        });
+        await this.$http.post(urljoin(this.endpoint, "/io/rbps"), formData);
         this.$toast.success("Successfully set disk read speed.");
       } catch (error) {
         this.$toast.error(
@@ -159,12 +167,13 @@ export default {
       }
     },
     async setDiskWrite() {
+      let formData = new FormData()
+      formData.append('deviceMaj', config.deviceMaj);
+      formData.append('deviceMin', config.deviceMin);
+      formData.append('wbps', parseInt(this.diskwrite));
+
       try {
-        await this.$http.post(urljoin(this.endpoint, "/io/wbps"), {
-          deviceMaj: config.deviceMaj,
-          deviceMin: config.deviceMin,
-          wbps: this.diskwrite,
-        });
+        await this.$http.post(urljoin(this.endpoint, "/io/wbps"), formData);
         this.$toast.success("Successfully set disk write speed.");
       } catch (error) {
         this.$toast.error(
