@@ -20,7 +20,6 @@
     <Policy PolicyId="SmartSuranceResourceManagement"
             Version="1.0"
             xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
-            xmlns:geoxacml="http://www.opengis.net/geoxacml"
             RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:first-applicable">
 
         <Target>
@@ -330,7 +329,6 @@
     <Policy PolicyId="SmartSuranceSensorData"
             Version="1.0"
             xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
-            xmlns:geoxacml="http://www.opengis.net/geoxacml"
             RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit">
 
         <Target>
