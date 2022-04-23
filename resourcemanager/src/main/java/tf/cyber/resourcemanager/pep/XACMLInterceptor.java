@@ -104,50 +104,48 @@ public class XACMLInterceptor {
         Arrays.stream(signature.getMethod().getParameterAnnotations()).forEach(parameterAnnotations -> {
             Arrays.stream(parameterAnnotations).forEach(annotation -> {
                 // Ignore null parameters.
-                if (args[i.get()] == null) {
-                    i.addAndGet(1);
-                    return;
-                }
-
-                if (annotation instanceof Subject) {
-                    Subject subject = (Subject) annotation;
-                    XACMLAttribute<?> subjectAttr = new XACMLAttribute<>(subject.value(),
-                                                                         XACML_SUBJECT_CATEGORY,
-                                                                         args[i.get()]);
-
-                    categories.get(XACML_SUBJECT_CATEGORY).add(subjectAttr);
-                } else if (annotation instanceof Action) {
-                    Action action = (Action) annotation;
-                    XACMLAttribute<?> actionAttr = new XACMLAttribute<>(action.value(),
-                                                                        XACML_ACTION_CATEGORY,
-                                                                        args[i.get()]);
-
-                    categories.get(XACML_ACTION_CATEGORY).add(actionAttr);
-                } else if (annotation instanceof Resource) {
-                    Resource resource = (Resource) annotation;
-                    XACMLAttribute<?> actionAttr = new XACMLAttribute<>(resource.value(),
-                                                                        XACML_RESOURCE_CATEGORY,
-                                                                        args[i.get()]);
-
-                    categories.get(XACML_RESOURCE_CATEGORY).add(actionAttr);
-                } else if (annotation instanceof Environment) {
-                    Environment environment = (Environment) annotation;
-                    XACMLAttribute<?> environmentAttr = new XACMLAttribute<>(environment.value(),
-                                                                             XACML_ENVIRONMENT_CATEGORY,
+                if (args[i.get()] != null) {
+                    if (annotation instanceof Subject) {
+                        Subject subject = (Subject) annotation;
+                        XACMLAttribute<?> subjectAttr = new XACMLAttribute<>(subject.value(),
+                                                                             XACML_SUBJECT_CATEGORY,
                                                                              args[i.get()]);
 
-                    categories.putIfAbsent(XACML_ENVIRONMENT_CATEGORY, new LinkedList<>());
-                    categories.get(XACML_ENVIRONMENT_CATEGORY).add(environmentAttr);
-                } else if (annotation instanceof CustomCategory) {
-                    CustomCategory other = (CustomCategory) annotation;
-                    XACMLAttribute<?> otherAttr = new XACMLAttribute<>(other.value(),
-                                                                       other.category(),
-                                                                       args[i.get()]);
+                        categories.get(XACML_SUBJECT_CATEGORY).add(subjectAttr);
+                    } else if (annotation instanceof Action) {
+                        Action action = (Action) annotation;
+                        XACMLAttribute<?> actionAttr = new XACMLAttribute<>(action.value(),
+                                                                            XACML_ACTION_CATEGORY,
+                                                                            args[i.get()]);
 
-                    categories.putIfAbsent(other.category(), new LinkedList<>());
-                    categories.get(other.category()).add(otherAttr);
+                        categories.get(XACML_ACTION_CATEGORY).add(actionAttr);
+                    } else if (annotation instanceof Resource) {
+                        Resource resource = (Resource) annotation;
+                        XACMLAttribute<?> actionAttr = new XACMLAttribute<>(resource.value(),
+                                                                            XACML_RESOURCE_CATEGORY,
+                                                                            args[i.get()]);
+
+                        categories.get(XACML_RESOURCE_CATEGORY).add(actionAttr);
+                    } else if (annotation instanceof Environment) {
+                        Environment environment = (Environment) annotation;
+                        XACMLAttribute<?> environmentAttr = new XACMLAttribute<>(environment.value(),
+                                                                                 XACML_ENVIRONMENT_CATEGORY,
+                                                                                 args[i.get()]);
+
+                        categories.putIfAbsent(XACML_ENVIRONMENT_CATEGORY, new LinkedList<>());
+                        categories.get(XACML_ENVIRONMENT_CATEGORY).add(environmentAttr);
+                    } else if (annotation instanceof CustomCategory) {
+                        CustomCategory other = (CustomCategory) annotation;
+                        XACMLAttribute<?> otherAttr = new XACMLAttribute<>(other.value(),
+                                                                           other.category(),
+                                                                           args[i.get()]);
+
+                        categories.putIfAbsent(other.category(), new LinkedList<>());
+                        categories.get(other.category()).add(otherAttr);
+                    }
                 }
             });
+
             i.addAndGet(1);
         });
 

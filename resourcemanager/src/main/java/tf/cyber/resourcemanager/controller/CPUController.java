@@ -47,8 +47,7 @@ public class CPUController {
     }
 
     @RequestMapping(value = "/time/fractional", method = RequestMethod.POST)
-    public String setCPUTimeWithFraction(@RequestParam @Resource("urn:tf:cyber:resourcecontrol" +
-            ":cpu:time") Integer time,
+    public String setCPUTimeWithFraction(@Resource("urn:tf:cyber:resourcecontrol:cpu:time") Integer time,
                                          @Resource("urn:tf:cyber:resourcecontrol:cpu:fraction") Integer fraction)
             throws IOException {
         if (time == null) {
