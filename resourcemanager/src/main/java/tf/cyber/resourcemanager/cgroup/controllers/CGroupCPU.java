@@ -67,10 +67,6 @@ public class CGroupCPU {
             throw new IllegalArgumentException("Time and fraction must not be negative.");
         }
 
-        if (fraction < time) {
-            throw new IllegalArgumentException("Fraction must not be smaller than time.");
-        }
-
         Files.writeString(Paths.get(cgroupPath.toString(), CPU_MAX),
                           time + " " + fraction,
                           StandardOpenOption.WRITE);
