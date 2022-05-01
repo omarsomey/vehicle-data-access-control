@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <PolicySet xmlns="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            PolicySetId="permit-all" Version="0.1.0"
            PolicyCombiningAlgId="urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:deny-unless-permit">
     <Target/>
@@ -14,59 +13,7 @@
 
         <Rule
                 Effect="Permit"
-                RuleId="DenyTest">
-
-            <!--<Condition>
-                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-greater-than">
-                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-one-and-only">
-                        <AttributeDesignator DataType="http://www.w3.org/2001/XMLSchema#integer"
-                                             AttributeId="urn:tf:cyber:xacml:polling-frequency:time-since-last-access:ms"
-                                             Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
-                                             MustBePresent="true"
-                        />
-                    </Apply>
-
-                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">1000</AttributeValue>
-                </Apply>
-            </Condition>-->
-
-            <Condition>
-                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:double-greater-than">
-                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#double">0.25</AttributeValue>
-
-                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:double-one-and-only">
-                        <AttributeDesignator DataType="http://www.w3.org/2001/XMLSchema#double"
-                                             AttributeId="urn:tf:cyber:xacml:polling-frequency:hz"
-                                             Category="urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
-                                             MustBePresent="true"
-                        />
-                    </Apply>
-                </Apply>
-            </Condition>
+                RuleId="PermitTest">
         </Rule>
-
-        <ObligationExpressions>
-            <ObligationExpression ObligationId="LogObligation" FulfillOn="Permit">
-                <AttributeAssignmentExpression AttributeId="LogObligation:Subject">
-                    <AttributeDesignator MustBePresent="true"
-                                         Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
-                                         AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id"
-                                         DataType="http://www.w3.org/2001/XMLSchema#string"/>
-                </AttributeAssignmentExpression>
-                <AttributeAssignmentExpression AttributeId="LogObligation:Action">
-                    <AttributeDesignator MustBePresent="true"
-                                         Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action"
-                                         AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
-                                         DataType="http://www.w3.org/2001/XMLSchema#string"/>
-                </AttributeAssignmentExpression>
-                <AttributeAssignmentExpression AttributeId="LogObligation:Resource">
-                    <AttributeDesignator MustBePresent="true"
-                                         Category="urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
-                                         AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
-                                         DataType="http://www.w3.org/2001/XMLSchema#string"/>
-                </AttributeAssignmentExpression>
-            </ObligationExpression>
-        </ObligationExpressions>
-
     </Policy>
 </PolicySet>

@@ -7,7 +7,7 @@
               DataType="http://www.w3.org/2001/XMLSchema#dateTime"
               MustBePresent="false"/>
     </Apply>
-    <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">1+01:00</AttributeValue>
-    <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">5+01:00</AttributeValue>
+    <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">1+02:00</AttributeValue>
+    <AttributeValue DataType="urn:oasis:names:tc:xacml:3.0:data‑type:dayOfWeek">5+02:00</AttributeValue>
   </Apply>
 </Condition>
