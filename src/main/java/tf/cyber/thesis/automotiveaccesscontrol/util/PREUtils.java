@@ -7,6 +7,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 public class PREUtils {
 
     private String cryptoFolder;
+    private String dataFolder;
     private String schemeName ;
     private String ccPath;
     private int plainttextModulus;
@@ -16,6 +17,14 @@ public class PREUtils {
         this.schemeName = schemeName;
         this.plainttextModulus = plainttextModulus;
         this.multiplicativeDepth = multiplicativeDepth;
+    }
+
+    public String getDataFolder() {
+        return dataFolder;
+    }
+
+    public void setDataFolder(String dataFolder) {
+        this.dataFolder = dataFolder;
     }
 
     public String getCryptoFolder() {
@@ -64,19 +73,19 @@ public class PREUtils {
 
         PREUtils pre = new PREUtils("BFV", 256, 2);
         pre.setCryptoFolder("/home/somey/IdeaProjects/automotive-access-control/src/main/resources/crypto/");
+        pre.setDataFolder("/home/somey/IdeaProjects/automotive-access-control/src/main/resources/data/");
 
         //Random String generator
         String generatedString = RandomStringUtils.randomAlphanumeric(300);
-        OpenPRE.INSTANCE.cryptoContextGen(pre.getSchemeName(), pre.getCryptoFolder(),"cryptocontext1.json", pre.getPlainttextModulus(),  pre.getMultiplicativeDepth() );
-        OpenPRE.INSTANCE.keysGen(pre.getCryptoFolder() , "cryptocontext1.json", "a");
-        String a  = OpenPRE.INSTANCE.Encrypt( "a-public-key.json", generatedString, pre.getCryptoFolder(),  "cryptocontext1.json");
-        System.out.println(a.length());
-        String b = OpenPRE.INSTANCE.Decrypt("a-private-key.json", a, pre.getCryptoFolder(),  "cryptocontext1.json");
-        System.out.print("Plaintext decrypted is : "+b);
-        OpenPRE.INSTANCE.keysGen(pre.getCryptoFolder()  , "cryptocontext1.json", "b");
-        OpenPRE.INSTANCE.ReKeyGen( "a-private-key.json", "b-public-key.json", pre.getCryptoFolder() , "cryptocontext1.json", "a2b");
-        String c = OpenPRE.INSTANCE.ReEncrypt(a, "a2b-re-enc-key.json", pre.getCryptoFolder(), "cryptocontext1.json");
-        String d = OpenPRE.INSTANCE.Decrypt( "b-private-key.json", c , pre.getCryptoFolder(),  "cryptocontext1.json");
+        OpenPRE.INSTANCE.cryptoContextGen(pre.getSchemeName(), pre.getCryptoFolder(),"cryptocontext", pre.getPlainttextModulus() );
+        OpenPRE.INSTANCE.keysGen(pre.getCryptoFolder() + "cryptocontext", pre.getCryptoFolder()+"a" );
+        OpenPRE.INSTANCE.Encrypt( pre.getCryptoFolder() + "a-public-key", generatedString, pre.getDataFolder() + "ciphertext");
+        //String b = OpenPRE.INSTANCE.Decrypt(pre.getCryptoFolder() + "a-private-key", pre.getDataFolder() + "ciphertext");
+        //System.out.print("Plaintext decrypted is : "+b);
+        OpenPRE.INSTANCE.keysGen(pre.getCryptoFolder() + "cryptocontext", pre.getCryptoFolder()+"b");
+        OpenPRE.INSTANCE.ReKeyGen( pre.getCryptoFolder() + "a-private-key", pre.getCryptoFolder() + "b-public-key", pre.getCryptoFolder() + "a2b");
+        OpenPRE.INSTANCE.ReEncrypt(pre.getDataFolder() + "ciphertext", pre.getCryptoFolder() + "a2b-re-enc-key",  pre.getDataFolder() + "ciphertext-re");
+        String d = OpenPRE.INSTANCE.Decrypt( pre.getCryptoFolder() + "b-private-key", pre.getDataFolder() + "ciphertext-re");
         System.out.print("Decryption of Ciphertext re encrypted : "+d);
     }
 }
